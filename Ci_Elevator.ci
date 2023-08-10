@@ -1,0 +1,122 @@
+// MyElevatorBinFnc()
+//
+//	Function created by Adam Rousseau, Schneider Electric Services&Projects Canada.
+//  2012-04-12
+//
+// This function replaces original FactoryLink PowerVB function that accept the bin setup changes on page Flour Elevator.
+// This function is called from "Confirm" button on Flou Elevator page.
+
+
+
+FUNCTION
+MyElevatorBinFnc()
+INT iTotal;
+INT itotal2;
+
+iTotal2 = temp_FME133Percent + temp_FME134Percent + temp_FME135Percent + temp_FME136Percent;
+IF iTotal2 > 100 THEN
+	//show an error message
+	Beep(1);
+	Message("Message from MyElevatorBinFnc()", "Setup Error. Total from all bins MUST = 100%", 48);
+	// Reset speed values.
+	temp_FME133percent = s5_153_004_speed;
+	temp_FME134percent = s5_153_005_speed;
+	temp_FME135percent = s5_153_006_speed;
+	temp_FME136percent = s5_153_007_speed;
+	// Reset Bin status (checkMark on button) to actual status.
+	IF s5_153_004_speed > 0 THEN
+		temp_FME133digital = 1;
+	ELSE
+		temp_FME133Digital = 0;
+	END
+	IF s5_153_005_speed > 0 THEN
+		temp_FME134digital = 1;
+	ELSE
+		temp_FME134Digital = 0;
+	END
+	IF s5_153_006_speed > 0 THEN
+		temp_FME135digital = 1;
+	ELSE
+		temp_FME135Digital = 0;
+	END 
+	IF s5_153_007_speed > 0 THEN
+		temp_FME136digital = 1;
+	ELSE
+		temp_FME136Digital = 0;
+	END
+ELSE
+	MyBinChageStatus("s5_153_004", "133");
+	MyBinChageStatus("s5_153_005", "134");
+	MyBinChageStatus("s5_153_006", "135");
+	MyBinChageStatus("s5_153_007", "136");
+	Message("Message from MyElevatorBinFnc()", "Bin set", 0);
+
+END
+
+END
+
+
+
+// MyBinChageStatus(STRING stag, STRING sBin);
+//
+// This function is called from MyElevatorBinFnc().
+//
+// bin status 1 = avaliable, 2 = selected, 3 = empty, 4 = VFD fault.
+
+
+
+FUNCTION
+MyBinChageStatus(STRING stag, STRING sBin);
+INT iStatus = TagRead("Bin" + sBin + "_Status");
+STRING sSpeed = sTag + "_Speed";
+INT iFMEPercent = TagRead("Temp_FME" + sBin + "Percent");
+INT iFMEdigital = TagRead("Temp_FME" + sBin + "Digital");
+STRING sStart = sTag + "_start";
+STRING sStop = sTag + "_stop";
+STRING sMessage = "Bin" + sBin + "_Message";
+
+
+IF iStatus <> 4 THEN
+	TagWrite(sSpeed, iFMEPercent);
+	IF iFMEDigital = 1 THEN
+		TagWrite(sStart, 1);
+		TagWrite(sStop, 0);
+		SleepMS(1500);
+		TagWrite(sStart, 0);
+		TagWrite(sMessage, 2); // 2 = selected.
+	END
+	IF iFMEDigital = 0 THEN
+		TagWrite(sStart, 0);
+		TagWrite(sStop, 1);
+		SleepMS(1500);
+		TagWrite(sStop, 0);
+		TagWrite(sMessage, 1); // 1 = Available
+	END	
+ELSE
+	Beep(1);
+	Message("Message from MyElevatorBinFnc()", "Bin " + sBin + " VFD Fault", 48);
+END
+
+END
+	
+
+
+// MyCheckSpeedFnc()
+//
+// This function update the animation of the check box on the Bin Setup Panel.
+
+FUNCTION
+MyCheckSpeedFnc(STRING sBin)
+INT iFMEPercent = TagRead("Temp_FME" + sBin + "Percent");
+STRING sFMEdigital = "Temp_FME" + sBin + "Digital";
+
+IF iFMEpercent > 0 THEN
+	TagWrite(sFMEdigital, 1);
+ELSE
+	TagWrite(sFMEdigital, 0);
+END
+
+END
+
+
+

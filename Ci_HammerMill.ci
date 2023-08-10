@@ -1,0 +1,20 @@
+// MyHammerMillFnc()
+//
+// This function sets the default trend parameters on HammerMill page.
+
+FUNCTION
+MyHammerMillFnc()
+
+ProcessAnalystLoadFile("HammerMillPAV.pav", 0, 1, "AN817");
+
+TrnSetScale(828, 1, 0, "0");
+TrnSetScale(828, 1, 100, "200");
+
+TrnSetScale(828, 2, 0, "0");
+TrnSetScale(828, 2, 100, "105");
+
+TrnSetSpan(828, 3600);
+
+END
+
+

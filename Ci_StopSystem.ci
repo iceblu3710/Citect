@@ -1,0 +1,124 @@
+
+
+
+
+
+
+
+FUNCTION
+MyFncStopFillSystem()
+INT result;
+
+result = Message("Please confirm action", "Are you sure you want to Stop Fill System ?", 1);
+	IF result = 0 THEN
+		FILL_PRODUCTIONRUN_0 = 0;
+		FILL_PRODUCTIONRUN_1 = 0;
+		FILL_PRODUCTIONRUN_2 = 0;
+		FILL_PRODUCTIONRUN_3 = 0;
+		FILL_PRODUCTIONRUN_4 = 0;
+		FILL_PRODUCTIONRUN_5 = 0;
+		FILL_PRODUCTIONRUN_6 = 0;
+		FILL_PRODUCTIONRUN_7 = 0;
+		FILL_PRODUCTIONRUN_8 = 0;
+		FILL_PRODUCTIONRUN_9 = 0;
+		FILL_PRODUCTIONRUN_10 = 0;
+		FILL_PRODUCTIONRUN_11 = 0;
+		FILL_PRODUCTIONRUN_12 = 0;
+		FILL_PRODUCTIONRUN_13 = 1;
+		FILL_PRODUCTIONRUN_14 = 0;
+		FILL_PRODUCTIONRUN_15 = 0;
+		FILL_PRODUCTIONRUN_16 = 0;
+		FILL_PRODUCTIONRUN_17 = 0;
+		FILL_PRODUCTIONRUN_18 = 1;
+	END
+Sleep(2);
+
+FILL_PRODUCTIONRUN_18 = 2; // Proceed with new order.
+MyLogFnc("StopFill");
+
+
+END
+
+
+
+
+
+
+
+
+
+//Function to Stop Transfer System
+//Function called from menu (Project Editor\System\Page Menu)
+//Created by Adam Rousseau, SE Canada.
+
+FUNCTION
+CallSystemStop(INT IStopMode)
+INT result;
+
+SELECT CASE IStopMode
+
+CASE 4
+
+	result = Message("Please confirm action", "Are you sure you want to Stop System 4 ?", 1);
+	IF result = 0 THEN
+		MyFncStopSystem4();
+		MyLogFnc("StopSystem4");
+	END
+
+CASE 5
+
+	result = Message("Please confirm action", "Are you sure you want to Stop System 5 ?", 1);
+	IF result = 0 THEN
+		MyFncStopSystem5();
+		MyLogFnc("StopSystem5");
+	END
+
+END SELECT
+
+
+END
+
+
+FUNCTION
+MyFncStopSystem4()
+
+system4_productionrun_0 = 0;
+system4_productionrun_1 = 0;
+system4_productionrun_2 = 0;
+system4_productionrun_3 = 0;
+system4_productionrun_4 = 2;
+system4_productionrun_5 = 0;
+system4_productionrun_6 = 1;
+Sleep(2);
+system4_productionrun_6 = 2;
+
+Transfer4_CurrentSourceBin = "";
+Transfer4_CurrentDestinationBin = "";
+Transfer4_CurrentWOWsifter = 0;
+Transfer4_CurrentTargetWeight = 0;
+Transfer4_CurrentFlourType = "";
+
+END
+
+FUNCTION
+MyFncStopSystem5()
+
+system5_productionrun_0 = 0;
+system5_productionrun_1 = 0;
+system5_productionrun_2 = 0;
+system5_productionrun_3 = 0;
+system5_productionrun_4 = 2;
+system5_productionrun_5 = 0;
+system5_productionrun_6 = 1;
+Sleep(2);
+system5_productionrun_6 = 2; 
+
+Transfer5_CurrentSourceBin = "";
+Transfer5_CurrentDestinationBin = "";
+Transfer5_CurrentWOWsifter = 0;
+Transfer5_CurrentTargetWeight = 0;
+Transfer5_CurrentFlourType = "";
+
+
+END
+

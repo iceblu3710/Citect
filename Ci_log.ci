@@ -1,0 +1,232 @@
+//Function to log actions from operators in the system.
+//Created by Adam Rousseau, Schneider electric Canada.
+
+FUNCTION
+MyLogFnc(STRING sType)
+STRING sUserName;
+INT hFile;
+STRING sTime = Time(1);
+
+sUserName = UserInfo(2);
+
+	ErrSet(1);
+
+	// Open or create new lof file.
+	hfile = FileOpen("c:\VijeoCitectprojects\Journal\Journal" + MyFncSetFileFooter(),"a");
+	IF hfile = -1 THEN
+		Message("Error","Cannot open journal",48);
+		Beep(2);
+		ErrSet(0);
+		Halt();
+	END
+
+	FileWriteLn(hfile, "User who initiated the change : " + sUserName);
+
+	SELECT CASE sType
+	
+		CASE "FillSetup"
+
+			FileWriteLn(hfile, "New FILL Setup has been done at : " + sTime);
+			FileWriteLn(hfile, "Type of Run : " + FillSetup_ProductionType);
+			FileWriteLn(hfile, "Patent Flour Type            : " + FillSetup_PatentFlourType);
+			FileWriteLn(hfile, "               First bin  : " + FillSetup_Patent1bin);
+			FileWriteLn(hfile, "               Second bin :	" + FillSetup_Patent2bin);
+			FileWriteLn(hfile, "               Third bin  :	" + FillSetup_Patent3bin);
+			FileWriteLn(hfile, "Bakers Flour Type            : " + FillSetup_BakersFlourType);
+			FileWriteLn(hfile, "               First bin  : " + FillSetup_Bakers1bin);
+			FileWriteLn(hfile, "               Second bin :	" + FillSetup_Bakers2bin);
+			FileWriteLn(hfile, "               Third bin  :	" + FillSetup_Bakers3bin);
+			FileWriteLn(hfile, "Clears Flour Type            : " + FillSetup_ClearsFlourType);
+			FileWriteLn(hfile, "               First bin  : " + FillSetup_Clears1bin);
+			FileWriteLn(hfile, "               Second bin :	" + FillSetup_Clears2bin);
+			FileWriteLn(hfile, "               Third bin  :	" + FillSetup_Clears3bin);
+			IF FillSetup_HeadEndBinMode = 1 THEN
+				FileWriteLn(hfile, "Head End bin : OFF");
+			ELSE
+				FileWriteLn(hfile, "Head End bin : ON");
+			END
+			IF FillSetup_ExchangeBinMode = 1 THEN
+				FileWriteLn(hfile, "Exchange bin : OFF");
+			ELSE
+				FileWriteLn(hfile, "Exchange bin : ON");
+			END
+			IF FillSetup_BranFeedMode = 1 THEN
+				FileWriteLn(hfile, "Bran Feed : OFF");
+			ELSE
+				FileWriteLn(hfile, "Bran Feed : ON");
+			END
+			FileWriteLn(hfile, "Bran Feed Speed Setpoint : "+ IntToStr(FillSetup_BranFeedSpeed));
+			IF FillSetup_RunTimeMode = 1 THEN
+				FileWriteLn(hfile, "Run Time : OFF");
+			ELSE
+				FileWriteLn(hfile, "Run Time : ON");
+			END
+			FileWriteLn(hfile, "Run Period : "+ IntToStr(FillSetup_RunTimeTime));
+
+		CASE "TransferSetup"
+		
+			FileWriteLn(hfile, "New Transfer Setup has been done at : " + sTime);
+			FileWriteLn(hfile, "System selected : " + IntToStr(TransferSetup_Blower));
+			IF TransferSetup_BlendMode = 1 THEN
+				FileWriteLn(hfile, "Blend Mode : OFF");
+			ELSE
+				FileWriteLn(hfile, "Blend Mode : ON");
+			END
+			FileWriteLn(hfile, "Source Bin      : " + TransferSetup_SourceBin);
+			FileWriteLn(hfile, "              First Bin Flour Type  : " + TransferSetup_SourceBin1_Ftype);
+			FileWriteLn(hfile, "              Second Bin Flour Type : " + TransferSetup_SourceBin2_Ftype);
+			FileWriteLn(hfile, "              Third Bin Flour Type  : " + TransferSetup_SourceBin3_Ftype);
+			FileWriteLn(hfile, "Destination bin : " + TransferSetup_DestinationBin);
+			IF TransferSetup_SourceBinEmptyMode = 1 THEN
+				FileWriteLn(hfile, "Source Bin Empty mode : OFF");
+			ELSE
+				FileWriteLn(hfile, "Source Bin Empty mode : ON");
+			END
+			IF TransferSetup_WOWsifter = 1 THEN
+				FileWriteLn(hfile, "WOW sifter NOT selected");
+			ELSE
+				FileWriteLn(hfile, "WOW sifter selected");
+			END
+			IF TransferSetup_DestinationFillMode = 1 THEN
+				FileWriteLn(hfile, "Destination Fill Mode is OFF");
+			ELSE
+				FileWriteLn(hfile, "Destination Fill Mode is ON");
+			END
+			FileWriteLn(hfile, "Target Weight : " + inttostr(TransferSetup_TargetWeight));
+
+		CASE "GoldDustFillBakery1"
+			FileWriteLn(hfile, "Gold dust; Fill bakery 1 Bin performed at : " + sTime);
+
+		CASE "GolddustStopFilters"
+			FileWriteLn(hfile, "Gold dust; Filters stopped at : " + sTime);
+		
+
+		CASE "GoldDustFillBakery2"
+			FileWriteLn(hfile, "Gold dust; Fill bakery 2 Bin performed at : " + sTime);
+
+		CASE "GolddustB1toBinD"
+			FileWriteLn(hfile, "Gold dust; Bakery Bin 1 to Bin D performed at : " + sTime);
+
+		CASE "GolddustStopTransfer"
+			FileWriteLn(hfile, "Gold dust; Transfer stopped at : " + sTime);
+
+		CASE "GolddustB2toBinD"
+			FileWriteLn(hfile, "Gold dust; Bakery Bin 2 to Bin D performed at : " + sTime);
+
+		CASE "StopFill"
+			FileWriteLn(hfile, "Fill system Stop at : " + sTime);
+		
+		CASE "StopSystem4"
+			FileWriteLn(hfile, "System 4 stopped at : " + sTime);
+
+		CASE "StopSystem5"
+			FileWriteLn(hfile, "System 5 stopped at :" + sTime);				
+
+
+
+
+		END SELECT
+		FileWriteLn(hfile, "____________________________________________________________________________________________________________________");
+		FileClose(hfile);
+
+ErrSet(0);
+
+NewLog = 1;;
+
+END
+
+
+//Function to distribute log file to remote computers.
+//Created by Adam Rousseau, Schneider Electric Canada.
+
+FUNCTION
+MyFncCopyLogFile2()
+STRING sComputerName = ServerInfo("Client",0);
+NewLog = 0;
+
+SELECT CASE sComputerName
+
+	CASE "CitectSVR"
+		FileDelete("\\CitectClient1\c\VijeoCitectProjects\journal\ServerJournal" + MyFncSetFileFooter());
+		FileDelete("\\CitectClient2\c\VijeoCitectProjects\journal\ServerJournal" + MyFncSetFileFooter());
+		FileCopy("C:\VijeoCitectProjects\journal\Journal" + MyFncSetFileFooter(), "\\CitectClient1\c\VijeoCitectProjects\journal\ServerJournal" + MyFncSetFileFooter(),0);
+		FileCopy("C:\VijeoCitectProjects\journal\Journal" + MyFncSetFileFooter(), "\\CitectClient2\c\VijeoCitectProjects\journal\ServerJournal" + MyFncSetFileFooter(),0);
+
+	CASE "CitectClient1"
+		FileDelete("\\CitectSVR\c\VijeoCitectProjects\journal\MaintenanceJournal" + MyFncSetFileFooter());
+		FileDelete("\\CitectClient2\c\VijeoCitectProjects\journal\MaintenanceJournal" + MyFncSetFileFooter());
+		FileCopy("C:\VijeoCitectProjects\journal\Journal" + MyFncSetFileFooter(), "\\CitectSVR\c\VijeoCitectProjects\journal\MaintenanceJournal" + MyFncSetFileFooter(),0);
+		FileCopy("C:\VijeoCitectProjects\journal\Journal" + MyFncSetFileFooter(), "\\CitectClient2\c\VijeoCitectProjects\journal\MaintenanceJournal" + MyFncSetFileFooter(),0);
+
+	CASE "CitectClient2"
+		FileDelete("\\CitectSVR\c\VijeoCitectProjects\journal\PlannerJournal" + MyFncSetFileFooter());
+		FileDelete("\\CitectClient1\c\VijeoCitectProjects\journal\PlannerJournal" + MyFncSetFileFooter());
+		FileCopy("C:\VijeoCitectProjects\journal\Journal" + MyFncSetFileFooter(), "\\CitectSVR\c\VijeoCitectProjects\journal\PlannerJournal" + MyFncSetFileFooter(),0);
+		FileCopy("C:\VijeoCitectProjects\journal\Journal" + MyFncSetFileFooter(), "\\CitectClient1\c\VijeoCitectProjects\journal\PlannerJournal" + MyFncSetFileFooter(),0);
+
+	CASE "CitectClient3"
+		FileDelete("\\CitectSVR\c\VijeoCitectProjects\journal\PackerJournal" + MyFncSetFileFooter());
+		FileDelete("\\CitectClient1\c\VijeoCitectProjects\journal\PackerJournal" + MyFncSetFileFooter());
+		FileDelete("\\CitectClient2\c\VijeoCitectProjects\journal\PackerJournal" + MyFncSetFileFooter());
+		FileCopy("C:\VijeoCitectProjects\journal\Journal" + MyFncSetFileFooter(), "\\CitectSVR\c\VijeoCitectProjects\journal\PackerJournal" + MyFncSetFileFooter(),0);
+		FileCopy("C:\VijeoCitectProjects\journal\Journal" + MyFncSetFileFooter(), "\\CitectClient1\c\VijeoCitectProjects\journal\PackerJournal" + MyFncSetFileFooter(),0);
+		FileCopy("C:\VijeoCitectProjects\journal\Journal" + MyFncSetFileFooter(), "\\CitectClient2\c\VijeoCitectProjects\journal\PackerJournal" + MyFncSetFileFooter(),0);
+
+	CASE "CitectClient4"
+		FileDelete("\\CitectSVR\c\VijeoCitectProjects\MillerJournal" + MyFncSetFileFooter());
+		FileDelete("\\CitectClient1\c\VijeoCitectProjects\MillerJournal" + MyFncSetFileFooter());
+		FileDelete("\\CitectClient2\c\VijeoCitectProjects\MillerJournal" + MyFncSetFileFooter());
+		FileCopy("C:\VijeoCitectProjects\journal\Journal" + MyFncSetFileFooter(), "\\CitectSVR\c\VijeoCitectProjects\journal\MillerJournal" + MyFncSetFileFooter(),0);
+		FileCopy("C:\VijeoCitectProjects\journal\Journal" + MyFncSetFileFooter(), "\\CitectClient1\c\VijeoCitectProjects\journal\MillerJournal" + MyFncSetFileFooter(),0);
+		FileCopy("C:\VijeoCitectProjects\journal\Journal" + MyFncSetFileFooter(), "\\CitectClient2\c\VijeoCitectProjects\journal\MillerJournal" + MyFncSetFileFooter(),0);
+
+	END SELECT
+
+END
+
+
+
+
+//function to set filefooter.
+//created by Adam Rousseau, Schneider Electric Canada.
+
+STRING
+FUNCTION
+MyFncSetFileFooter()
+
+	STRING sFileFooter;
+    STRING sDay;
+    STRING sMonth;
+    STRING sYear;
+    STRING sHour;
+    STRING sMinute;
+
+	sday = IntToStr(DateDay(TimeCurrent()));
+	IF StrLength(sday) < 2 THEN
+		sDay = "0" + sDay;
+	END
+
+	sMonth = IntToStr(DateMonth(TimeCurrent()));
+	IF StrLength(sMonth) < 2 THEN
+		sMonth = "0" + sMonth;
+	END
+
+	sYear = IntToStr(DateYear(TimeCurrent(),1));
+	IF StrLength(sday) < 2 THEN
+		sDay = "0" + sDay;
+	END
+	
+	sHour = IntToStr(TimeHour(TimeCurrent()));
+	IF StrLength(sHour) < 2 THEN
+		sHour = "0" + sHour;		
+	END
+
+	sMinute = IntToStr(TimeMin(TimeCurrent()));
+	IF StrLength(sMinute) < 2 THEN
+		sMinute = "0" + sMinute;		
+	END
+
+    sFileFooter = "_" + sYear + "_" + sMonth + "_" + sDay + ".txt";
+	RETURN sFileFooter;
+END  
+

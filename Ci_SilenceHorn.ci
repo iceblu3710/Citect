@@ -1,0 +1,17 @@
+//Function controlling the horn in the miller office.
+//Created by Adam rousseau, Schneider electric Canada.
+
+FUNCTION 
+MyFncSilenceHorn()
+
+MILL_HORN_SILENCE = 1;
+MILL_HORN_SILENCE_RTM = 1;
+
+Sleep(1);
+Message("Silence Horn", "Horn in Miller Office is being silenced.. Press OK to continue", 0);
+Sleep(1);
+
+MILL_HORN_SILENCE = 0;
+MILL_HORN_SILENCE_RTM = 0;
+
+END

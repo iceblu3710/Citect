@@ -1,0 +1,27 @@
+
+//-----------------------------------------------------------------------------
+//
+//	FUNCTION NAME:
+//		MyFncUserLogin()
+//
+//	SUMMARY:
+//		Asks the operator to login if not.
+//			
+//	PARAMS:
+//		None
+//			
+//	RETURNS: 
+//		None
+//
+//  Created by:
+//		Adam Rousseau, Schneider-Electric Canada.
+//
+//-----------------------------------------------------------------------------
+FUNCTION
+MyFncUserLogin()
+
+IF UserInfo(0) = "0" THEN
+	LoginForm("","");
+END
+
+END

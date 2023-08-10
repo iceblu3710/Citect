@@ -1,0 +1,11 @@
+// Function to Sound Alarms in the Mill.
+// Function called when alarm goes on (ON Action in Alarm Categories).
+// Created by Adam Rousseau, SE Cannada.
+
+FUNCTION
+MyFncSoundAlarm()
+
+// no tags configured
+
+END
+

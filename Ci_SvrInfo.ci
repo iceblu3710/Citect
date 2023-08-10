@@ -1,0 +1,29 @@
+
+//-----------------------------------------------------------------------------
+//
+//	FUNCTION NAME:
+//		MaFncServerStatus()
+//
+//	SUMMARY:
+//		Get present servers status.
+//			
+//	PARAMS:
+//		None
+//			
+//	RETURNS: 
+//		None
+//
+//  Created by:
+//		Adam Rousseau, Schneider-Electric Canada.
+//
+//-----------------------------------------------------------------------------
+FUNCTION
+MaFncServerStatus()
+
+PH_sas.Status_serveur_IO_P = ServerIsOnline("IOserver_P","PH_sas");
+PH_sas.Status_serveur_Alm_P = ServerIsOnline("Alarmsvr_P","PH_sas");
+PH_sas.Status_serveur_Trend_P = ServerIsOnline("Trendsvr","PH_sas");
+PH_sas.Status_serveur_Report_P = ServerIsOnline("Reportsvr","PH_sas");
+
+
+END

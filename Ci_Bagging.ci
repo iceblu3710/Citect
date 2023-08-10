@@ -1,0 +1,272 @@
+//FUNCTIONS used to select Source Packing Bins for Baggin machines.
+
+
+FUNCTION
+BaggingSetupFawemaSource(STRING sSource)
+INT iResult;
+
+SELECT CASE sSource
+
+	CASE "A"
+		iResult = Message("Fawema Source Bin Selection", "SELECT Packing Bin A ?", 1);
+		IF iResult = 0 THEN
+			PAC_FAW_SEL_A = 1;
+			Sleep(2);
+			PAC_FAW_SEL_A = 0;
+		ELSE
+			Message("Fawema Source Bin Selection", "Action Cancelled", 0);
+		END
+	CASE "B"
+		iResult = Message("Fawema Source Bin Selection", "SELECT Packing Bin B ?", 1);
+		IF iResult = 0 THEN
+			PAC_FAW_SEL_B = 1;
+			Sleep(2);
+			PAC_FAW_SEL_B = 0;
+		ELSE
+			Message("Fawema Source Bin Selection", "Action Cancelled", 0);
+		END
+	CASE "C"
+		iResult = Message("Fawema Source Bin Selection", "SELECT Packing Bin C ?", 1);
+		IF iResult = 0 THEN
+			PAC_FAW_SEL_C = 1;
+			Sleep(2);
+			PAC_FAW_SEL_C = 0;
+		ELSE
+			Message("Fawema Source Bin Selection", "Action Cancelled", 0);
+		END
+	CASE "Unselect"
+		iResult = Message("Fawema Source Bin Selection", "Unselect Bin ?", 1);
+		IF iResult = 0 THEN
+			PAC_FAW_UNSEL = 1;
+			Sleep(2);
+			PAC_FAW_UNSEL = 0;
+		ELSE
+			Message("Fawema Source Bin Selection", "Action Cancelled", 0);
+		END
+	END SELECT
+
+END
+
+
+FUNCTION
+BaggingSetupSuperSource(STRING sSource)
+INT iResult;
+
+SELECT CASE sSource
+
+	CASE "C"
+		iResult = Message("SuperSack Source Bin Selection", "SELECT Packing Bin C ?", 1);
+		IF iResult = 0 THEN
+			PAC_SS_SEL_C = 1;
+			Sleep(2);
+			PAC_SS_SEL_C = 0;
+		ELSE
+			Message("SuperSack Source Bin Selection", "Action Cancelled", 0);
+		END
+	CASE "E"
+		iResult = Message("SuperSack Source Bin Selection", "SELECT Packing Bin E ?", 1);
+		IF iResult = 0 THEN
+			PAC_SS_SEL_E = 1;
+			Sleep(2);
+			PAC_SS_SEL_E = 0;
+		ELSE
+			Message("SuperSack Source Bin Selection", "Action Cancelled", 0);
+		END
+	CASE "Unselect"
+		iResult = Message("SuperSack Source Bin Selection", "Unselect Bin ?", 1);
+		IF iResult = 0 THEN
+			PAC_SS_UNSEL = 1;
+			Sleep(2);
+			PAC_SS_UNSEL = 0;
+		ELSE
+			Message("SuperSack Source Bin Selection", "Action Cancelled", 0);
+		END
+	END SELECT
+
+END
+
+
+FUNCTION
+BaggingSetupItalpakSource(STRING sSource)
+INT iResult;
+
+SELECT CASE sSource
+
+	CASE "B"
+		iResult = Message("Italpak Source Bin Selection", "SELECT Packing Bin B ?", 1);
+		IF iResult = 0 THEN
+			PAC_108_SEL_B = 1;
+			Sleep(2);
+			PAC_108_SEL_B = 0;
+		ELSE
+			Message("Italpak Source Bin Selection", "Action Cancelled", 0);
+		END
+	CASE "C"
+		iResult = Message("Italpak Source Bin Selection", "SELECT Packing Bin C ?", 1);
+		IF iResult = 0 THEN
+			PAC_108_SEL_C = 1;
+			Sleep(2);
+			PAC_108_SEL_C = 0;
+		ELSE
+			Message("Italpak Source Bin Selection", "Action Cancelled", 0);
+		END
+	CASE "StartPurge"
+		iResult = Message("Italpak Start Purge", "Start Purge ?", 1);
+		IF iResult = 0 THEN
+			PAC_108_SEL_OrgPurge = 1;
+			Sleep(2);
+			PAC_108_SEL_OrgPurge = 0;
+		ELSE
+			Message("Italpak Start Purge", "Action Cancelled", 0);
+		END
+	CASE "StopPurge"
+		iResult = Message("Italpak Stop Purge", "Stop Purge ?", 1);
+		IF iResult = 0 THEN
+			PAC_108_SEL_OrgStopPurge = 1;
+			Sleep(2);
+			PAC_108_SEL_OrgStopPurge = 0;
+		ELSE
+			Message("Italpak Stop Purge", "Action Cancelled", 0);
+		END
+	CASE "StartOrganic"
+		iResult = Message("Italpak Start Organic", "Start Organic ?", 1);
+		IF iResult = 0 THEN
+			PAC_108_SEL_Organic = 1;
+			Sleep(2);
+			PAC_108_SEL_Organic = 0;
+		ELSE
+			Message("Italpak Start Organic", "Action Cancelled", 0);
+		END
+	CASE "StopOrganic"
+		iResult = Message("Italpak Stop Organic", "Stop Organic ?", 1);
+		IF iResult = 0 THEN
+			PAC_108_SEL_OrganicStop = 1;
+			Sleep(2);
+			PAC_108_SEL_OrganicStop = 0;
+		ELSE
+			Message("Italpak Stop Organic", "Action Cancelled", 0);
+		END
+	CASE "Unselect"
+		iResult = Message("Italpak Source Bin Selection", "Unselect Bin ?", 1);
+		IF iResult = 0 THEN
+			PAC_108_UNSEL = 1;
+			Sleep(2);
+			PAC_108_UNSEL = 0;
+		ELSE
+			Message("Italpak Source Bin Selection", "Action Cancelled", 0);
+		END
+	END SELECT
+
+END
+
+FUNCTION
+BaggingSetupCIPSource(STRING sSource)
+INT iResult;
+
+SELECT CASE sSource
+
+	CASE "C"
+		iResult = Message("CIP Source Bin Selection", "SELECT Packing Bin C ?", 1);
+		IF iResult = 0 THEN
+			PAC_CIP_SEL_C = 1;
+			Sleep(2);
+			PAC_CIP_SEL_C = 0;
+		ELSE
+			Message("CIP Source Bin Selection", "Action Cancelled", 0);
+		END
+	CASE "D"
+		iResult = Message("CIP Source Bin Selection", "SELECT Packing Bin D ?", 1);
+		IF iResult = 0 THEN
+			PAC_CIP_SEL_D = 1;
+			Sleep(2);
+			PAC_CIP_SEL_D = 0;
+		ELSE
+			Message("CIP Source Bin Selection", "Action Cancelled", 0);
+		END
+	CASE "E"
+		iResult = Message("CIP Source Bin Selection", "SELECT Packing Bin E ?", 1);
+		IF iResult = 0 THEN
+			PAC_CIP_SEL_E = 1;
+			Sleep(2);
+			PAC_CIP_SEL_E = 0;
+		ELSE
+			Message("CIP Source Bin Selection", "Action Cancelled", 0);
+		END
+	CASE "F"
+		iResult = Message("CIP Source Bin Selection", "SELECT Packing Bin F ?", 1);
+		IF iResult = 0 THEN
+			PAC_CIP_SEL_F = 1;
+			Sleep(2);
+			PAC_CIP_SEL_F = 0;
+		ELSE
+			Message("CIP Source Bin Selection", "Action Cancelled", 0);
+		END
+	CASE "Unselect"
+		iResult = Message("CIP Source Bin Selection", "Unselect Bin ?", 1);
+		IF iResult = 0 THEN
+			PAC_CIP_UNSEL = 1;
+			Sleep(2);
+			PAC_CIP_UNSEL = 0;
+		ELSE
+			Message("CIP Source Bin Selection", "Action Cancelled", 0);
+		END
+	END SELECT
+
+END
+
+
+
+FUNCTION
+	MyFncItalpakRunning()
+		IF PAC_108_ON_B BITOR PAC_108_ON_C BITOR PAC_108_ON_ORGPURGE BITOR PAC_108_ON_ORGANIC THEN
+		ItalpakRunning = 1;
+		ELSE 
+		ItalpakRunning = 0;
+		END
+	END
+
+
+
+
+
+
+
+
+
+STRING
+FUNCTION
+Italpak_Message()
+STRING sMessage;
+
+IF PAC_108_ON_orgpurge BITAND PAC_108_ON_organic THEN
+	sMessage = "- Error! -";
+ELSE
+	IF PAC_108_STAT_ORGPurge = 4 THEN
+		IF PAC_108_STAT_Organic <> 2 THEN
+			sMessage = "Purge Complete";
+		ELSE
+			sMessage = "Selected";
+		END
+	ELSE
+		sMessage = "Available";
+	END
+
+	IF PAC_108_ON_OrgPurge = 0 BITAND PAC_108_ON_Organic = 1 THEN
+		sMessage = "Selected";
+	END
+
+
+
+RETURN sMessage
+END
+
+END
+
+
+
+
+
+
+
+
+	

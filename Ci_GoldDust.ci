@@ -1,0 +1,118 @@
+//functions to confirm actions on Gold dust page.
+
+FUNCTION
+MyFncGDFillB1()
+INT result;
+
+	result = Message("Please confirm action", "Are you sure you want to fill Bakery 1 ?", 1);
+	IF result = 0 THEN
+		dv41_straight_to_bin2=1;		
+		start_gold_dust_bin_fill_bin1=1;
+		Sleep(2);
+		dv41_straight_to_bin2=0;
+		start_gold_dust_bin_fill_bin1=0;
+		MyLogFnc("GoldDustFillBakery1");
+
+	ELSE
+		Message("Gold Dust Fnc", "Action cancelled by user",48);
+	END
+
+END
+
+
+FUNCTION
+MyFncGDstop()
+INT result;
+
+	result = Message("Please confirm action", "Are you sure you want to stop filters ?", 1);
+	IF result = 0 THEN
+		stop_gold_dust_bin_fill_bin1=1;
+		stop_gold_dust_bin_fill_bin2=1;
+		Sleep(2);
+		stop_gold_dust_bin_fill_bin1=0;
+		stop_gold_dust_bin_fill_bin2=0;
+		dv41_branch_to_bin1=0;
+		dv41_straight_to_bin2=0;
+		MyLogFnc("GolddustStopFilters");
+	ELSE
+		Message("Gold Dust Fnc", "Action cancelled by user",48);
+	END
+
+END
+
+
+FUNCTION
+MyFncGDFillB2()
+INT result;
+
+	result = Message("Please confirm action", "Are you sure you want to fill Bakery 2 ?", 1);
+	IF result = 0 THEN
+		dv41_branch_to_bin1=1;
+		start_gold_dust_bin_fill_bin2=1;
+		Sleep(2);
+		dv41_branch_to_bin1=0;
+		start_gold_dust_bin_fill_bin2=0;
+		MyLogFnc("GoldDustFillBakery2");
+
+	ELSE
+		Message("Gold Dust Fnc", "Action cancelled by user",48);
+	END
+
+END
+
+FUNCTION
+MyFncGDtrB1()
+INT result;
+
+	result = Message("Please confirm action", "Are you sure you want to transfer Bakery 1 to bin D ?", 1);
+	IF result = 0 THEN
+		transferbakery1_bin_d=1;
+		start_gold_dust_bin_fill_bin1=1;
+		Sleep(2);
+		transferbakery1_bin_d=0;
+		start_gold_dust_bin_fill_bin1=0;	
+		FlourTypePackingBinD = "Gold dust";
+		MyLogFnc("GolddustB1toBinD");
+	ELSE
+		Message("Gold Dust Fnc", "Action cancelled by user",48);
+	END
+
+END
+
+
+FUNCTION
+MyFncGDtrstop()
+INT result;
+
+	result = Message("Please confirm action", "Are you sure you want to stop transfer ?", 1);
+	IF result = 0 THEN
+		transferbakery_bin_d_stop=1;
+		Sleep(2);
+		transferbakery_bin_d_stop=0;
+		MyLogFnc("GolddustStopTransfer");
+	ELSE
+		Message("Gold Dust Fnc", "Action cancelled by user",48);
+	END
+
+END
+
+
+FUNCTION
+MyFncGDtrB2()
+INT result;
+
+	result = Message("Please confirm action", "Are you sure you want to transfer from Bakery 2 to Bin D?", 1);
+	IF result = 0 THEN
+		transferbakery2_bin_d=1;
+		start_gold_dust_bin_fill_bin2=1;
+		Sleep(2);
+		transferbakery2_bin_d=0;
+		start_gold_dust_bin_fill_bin2=0;
+		FlourTypePackingBinD = "Gold dust";
+		MyLogFnc("GolddustB2toBinD");
+ 	ELSE
+		Message("Gold Dust Fnc", "Action cancelled by user",48);
+	END
+
+END
+

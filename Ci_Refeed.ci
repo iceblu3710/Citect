@@ -1,0 +1,58 @@
+//Function that controls the changes of Fill Production parameters
+//Created by Adam Rousseau, SE Canada.
+
+
+// this function is called from Fill Setup page and allow operator to change present run.
+// Especially useful for HeadBin, Exchange Bin and Bran Feed speed.
+FUNCTION
+FillSetupReFeed()
+
+FillSetup_PatentFlourType = FillSetup_PatentFlourType_mem;
+FillSetup_Patent1bin = FillSetup_Patent1bin_mem;
+FillSetup_Patent2bin = FillSetup_Patent2bin_mem;
+FillSetup_Patent3bin = FillSetup_Patent3bin_mem;
+FillSetup_BakersFlourType = FillSetup_BakersFlourType_mem;
+FillSetup_Bakers1bin = FillSetup_Bakers1bin_mem;
+FillSetup_Bakers2bin = FillSetup_Bakers2bin_mem;
+FillSetup_Bakers3bin = FillSetup_Bakers3bin_mem;
+FillSetup_ClearsFlourType = FillSetup_ClearsFlourType_mem;
+FillSetup_Clears1bin = FillSetup_Clears1bin_mem;
+FillSetup_Clears2bin = FillSetup_Clears2bin_mem;
+FillSetup_Clears3bin = FillSetup_Clears3bin_mem;
+FillSetup_HeadEndBinMode = FillSetup_HeadEndBinMode_mem;
+FillSetup_ExchangeBinMode = FillSetup_ExchangeBinMode_mem;
+FillSetup_BranFeedMode = FillSetup_BranFeedMode_mem;
+FillSetup_BranFeedSpeed = FillSetup_BranFeedSpeed_mem;
+FillSetup_RunTimeMode = FillSetup_RunTimeMode_mem;
+FillSetup_RunTimeTime = FillSetup_RunTimeTime_mem;
+FillSetup_ProductionType = FillSetup_ProductionType_mem;
+
+END
+
+
+
+
+//Function that controls the changes of transfer Production parameters
+//Created by Adam Rousseau, SE Canada.
+
+
+// this function is called from Transfer Setup page and allow operator to change present run.
+
+FUNCTION
+TransferSetupReFeed()
+
+TransferSetup_Blower = TransferSetup_Blower_mem;
+TransferSetup_BlendMode = TransferSetup_BlendMode_mem;
+TransferSetup_SourceBin = TransferSetup_SourceBin_mem;
+TransferSetup_DestinationBin = TransferSetup_DestinationBin_mem;
+TransferSetup_SourceBinEmptyMode = TransferSetup_SourceBinEmptyMode_mem;
+TransferSetup_WOWsifter = TransferSetup_WOWsifter_mem;
+TransferSetup_DestinationFillMode = TransferSetup_DestinationFillMode_mem;
+TransferSetup_TargetWeight = TransferSetup_TargetWeight_mem;
+TransferSetup_SourceBin1_Ftype = TransferSetup_SourceBin1_Ftype_mem;
+TransferSetup_SourceBin2_Ftype = TransferSetup_SourceBin2_Ftype_mem;
+TransferSetup_SourceBin3_Ftype = TransferSetup_SourceBin3_Ftype_mem;
+
+
+
+END

@@ -1,0 +1,337 @@
+// FUNCTION that calculates House Bins level based on Feet left in the Bins.
+// Created by Adam Rousseau, SE Canada.
+
+FUNCTION
+MyFncHouseBinWeights()
+REAL HouseBin1_TonMem;
+REAL HouseBin2_TonMem;
+REAL HouseBin3_TonMem;
+REAL HouseBin4_TonMem;
+REAL HouseBin5_TonMem;
+REAL HouseBin6_TonMem;
+REAL HouseBin7_TonMem;
+REAL HouseBin8_TonMem;
+REAL HouseBin9_TonMem;
+REAL HouseBin10_TonMem;
+REAL HouseBin11_TonMem;
+REAL HouseBin12_TonMem;
+REAL HouseBin13_TonMem;
+REAL HouseBin1_CubicFeet;
+REAL HouseBin2_CubicFeet;
+REAL HouseBin3_CubicFeet;
+REAL HouseBin4_CubicFeet;
+REAL HouseBin5_CubicFeet;
+REAL HouseBin6_CubicFeet;
+REAL HouseBin7_CubicFeet;
+REAL HouseBin8_CubicFeet;
+REAL HouseBin9_CubicFeet;
+REAL HouseBin10_CubicFeet;
+REAL HouseBin11_CubicFeet;
+REAL HouseBin12_CubicFeet;
+REAL HouseBin13_CubicFeet;
+REAL HouseBin1_SquareFeet;
+REAL HouseBin2_SquareFeet;
+REAL HouseBin3_SquareFeet;
+REAL HouseBin4_SquareFeet;
+REAL HouseBin5_SquareFeet;
+REAL HouseBin6_SquareFeet;
+REAL HouseBin7_SquareFeet;
+REAL HouseBin8_SquareFeet;
+REAL HouseBin9_SquareFeet;
+REAL HouseBin10_SquareFeet;
+REAL HouseBin11_SquareFeet;
+REAL HouseBin12_SquareFeet;
+REAL HouseBin13_SquareFeet;
+REAL HouseBin1_Pounds;
+REAL HouseBin2_Pounds;
+REAL HouseBin3_Pounds;
+REAL HouseBin4_Pounds;
+REAL HouseBin5_Pounds;
+REAL HouseBin6_Pounds;
+REAL HouseBin7_Pounds;
+REAL HouseBin8_Pounds;
+REAL HouseBin9_Pounds;
+REAL HouseBin10_Pounds;
+REAL HouseBin11_Pounds;
+REAL HouseBin12_Pounds;
+REAL HouseBin13_Pounds;
+
+
+//HouseBin 1 weight calculation.
+
+HouseBin1_cubicFeet = S1_806_001 * S1_806_001 * S1_806_001;
+HouseBin1_squareFeet =  S1_806_001 * S1_806_001;
+
+IF S1_806_001 <= 11.25 THEN
+	HouseBin1_Pounds = (((0.038 * HouseBin1_CubicFeet) + (1.12 * HouseBin1_SquareFeet) + (8.78 * s1_806_001) + 7.7)*40);
+ELSE
+	HouseBin1_Pounds = ((((S1_806_001 - 11.25) * 47.94) + 302.4) *40);
+END
+
+IF s1_806_001 > 0.5 THEN
+	HouseBin1_FeetLeft = 58.4 - S1_806_001;
+	HouseBin1_tonnes = HouseBin1_pounds / 2204.62;
+ELSE
+	HouseBin1_FeetLeft = 58.4;
+	HouseBin1_tonnes = 0;
+END
+
+
+//HouseBin 2 weight calculation.
+
+HouseBin2_cubicFeet = S1_806_002 * S1_806_002 * S1_806_002;
+HouseBin2_squareFeet =  S1_806_002 * S1_806_002;
+
+IF S1_806_002 <= 11.25 THEN
+	HouseBin2_Pounds = (((0.037 * HouseBin2_CubicFeet) + (1.08 * HouseBin2_SquareFeet) + (8.43 * s1_806_002) + 7.7)*40);
+ELSE
+	HouseBin2_Pounds = ((((S1_806_002 - 11.25) * 45.99) + 290.5) *40);
+END
+
+IF s1_806_002 > 0.5 THEN
+	HouseBin2_FeetLeft = 58.4 - S1_806_002;
+	HouseBin2_tonnes = HouseBin2_pounds / 2204.62;
+ELSE
+	HouseBin2_FeetLeft = 58.4;
+	HouseBin2_tonnes = 0;
+END
+
+
+//HouseBin 3 weight calculation.
+
+HouseBin3_cubicFeet = S1_806_003 * S1_806_003 * S1_806_003;
+HouseBin3_squareFeet =  S1_806_003 * S1_806_003;
+
+IF S1_806_003 <= 5.25 THEN
+	HouseBin3_Pounds = (((0.030 * HouseBin3_CubicFeet) + (0.96 * HouseBin3_SquareFeet) + (7.52 * s1_806_003) + 7.4)*40);
+ELSE
+	HouseBin3_Pounds = ((((S1_806_003 - 5.25) * 19.63) + 77.7) *40);
+END
+
+IF s1_806_003 > 0.5 THEN
+	HouseBin3_FeetLeft = 52.4 - S1_806_003;
+	HouseBin3_tonnes = HouseBin3_pounds / 2204.62;
+ELSE
+	HouseBin3_FeetLeft = 52.4;
+	HouseBin3_tonnes = 0;
+END
+
+
+
+//HouseBin 4 weight calculation.
+
+HouseBin4_cubicFeet = S1_806_004 * S1_806_004 * S1_806_004;
+HouseBin4_squareFeet =  S1_806_004 * S1_806_004;
+
+IF S1_806_004 <= 5.25 THEN
+	HouseBin4_Pounds = (((0.034 * HouseBin4_CubicFeet) + (1.08 * HouseBin4_SquareFeet) + (8.45 * s1_806_004) + 7.4)*40);
+ELSE
+	HouseBin4_Pounds = ((((S1_806_004 - 5.25) * 22.10) + 86.4) *40);
+END
+
+IF s1_806_004 > 0.5 THEN
+	HouseBin4_FeetLeft = 52.4 - S1_806_004;
+	HouseBin4_tonnes = HouseBin4_pounds / 2204.62;
+ELSE
+	HouseBin4_FeetLeft = 52.4;
+	HouseBin4_tonnes = 0;
+END
+
+
+//HouseBin 5 weight calculation.
+
+HouseBin5_cubicFeet = S1_806_005 * S1_806_005 * S1_806_005;
+HouseBin5_squareFeet =  S1_806_005 * S1_806_005;
+
+IF S1_806_005 <= 11.25 THEN
+	HouseBin5_Pounds = (((0.038 * HouseBin5_CubicFeet) + (1.12 * HouseBin5_SquareFeet) + (8.78 * s1_806_005) + 7.7)*40);
+ELSE
+	HouseBin5_Pounds = ((((S1_806_005 - 11.25) * 47.94) + 302.4) *40);
+END
+
+IF s1_806_005 > 0.5 THEN
+	HouseBin5_FeetLeft = 58.4 - S1_806_005;
+	HouseBin5_tonnes = HouseBin5_pounds / 2204.62;
+ELSE
+	HouseBin5_FeetLeft = 58.4;
+	HouseBin5_tonnes = 0;
+END
+
+
+//HouseBin 6 weight calculation.
+
+HouseBin6_cubicFeet = S1_806_006 * S1_806_006 * S1_806_006;
+HouseBin6_squareFeet =  S1_806_006 * S1_806_006;
+
+IF S1_806_006 <= 11.25 THEN
+	HouseBin6_Pounds = (((0.038 * HouseBin6_CubicFeet) + (1.13 * HouseBin6_SquareFeet) + (8.87 * s1_806_006) + 7.7)*40);
+ELSE
+	HouseBin6_Pounds = ((((S1_806_006 - 11.25) * 48.46) + 305.3) *40);
+END
+
+IF s1_806_006 > 0.5 THEN
+	HouseBin6_FeetLeft = 58.4 - S1_806_006;
+	HouseBin6_tonnes = HouseBin6_pounds / 2204.62;
+ELSE
+	HouseBin6_FeetLeft = 58.4;
+	HouseBin6_tonnes = 0;
+END
+
+
+//HouseBin 7 weight calculation.
+
+HouseBin7_cubicFeet = S1_806_007 * S1_806_007 * S1_806_007;
+HouseBin7_squareFeet =  S1_806_007 * S1_806_007;
+
+IF S1_806_007 <= 11.25 THEN
+	HouseBin7_Pounds = (((0.039 * HouseBin7_CubicFeet) + (1.14 * HouseBin7_SquareFeet) + (8.96 * s1_806_007) + 7.7)*40);
+ELSE
+	HouseBin7_Pounds = ((((S1_806_007 - 11.25) * 49.11) + 308.2) *40);
+END
+
+IF s1_806_007 > 0.5 THEN
+	HouseBin7_FeetLeft = 58.4 - S1_806_007;
+	HouseBin7_tonnes = HouseBin7_pounds / 2204.62;
+ELSE
+	HouseBin7_FeetLeft = 58.4;
+	HouseBin7_tonnes = 0;
+END
+
+
+
+//HouseBin 8 weight calculation.
+
+HouseBin8_cubicFeet = S1_806_008 * S1_806_008 * S1_806_008;
+HouseBin8_squareFeet =  S1_806_008 * S1_806_008;
+
+IF S1_806_008 <= 11.25 THEN
+	HouseBin8_Pounds = (((0.039 * HouseBin8_CubicFeet) + (1.14 * HouseBin8_SquareFeet) + (8.96 * s1_806_008) + 7.7)*40);
+ELSE
+	HouseBin8_Pounds = ((((S1_806_008 - 11.25) * 49.11) + 308.2) *40);
+END
+
+IF s1_806_008 > 0.5 THEN
+	HouseBin8_FeetLeft = 58.4 - S1_806_008;
+	HouseBin8_tonnes = HouseBin8_pounds / 2204.62;
+ELSE
+	HouseBin8_FeetLeft = 58.4;
+	HouseBin8_tonnes = 0;
+END
+
+
+
+//HouseBin 9 weight calculation.
+
+HouseBin9_cubicFeet = S1_806_009 * S1_806_009 * S1_806_009;
+HouseBin9_squareFeet =  S1_806_009 * S1_806_009;
+
+IF S1_806_009 <= 11.25 THEN
+	HouseBin9_Pounds = (((0.038 * HouseBin9_CubicFeet) + (1.13 * HouseBin9_SquareFeet) + (8.87 * s1_806_009) + 7.7)*40);
+ELSE
+	HouseBin9_Pounds = ((((S1_806_009 - 11.25) * 48.46) + 305.3) *40);
+END
+
+IF s1_806_009 > 0.5 THEN
+	HouseBin9_FeetLeft = 58.4 - S1_806_009;
+	HouseBin9_tonnes = HouseBin9_pounds / 2204.62;
+ELSE
+	HouseBin9_FeetLeft = 58.4;
+	HouseBin9_tonnes = 0;
+END
+
+
+//HouseBin 10 weight calculation.
+
+HouseBin10_cubicFeet = S1_806_010 * S1_806_010 * S1_806_010;
+HouseBin10_squareFeet =  S1_806_010 * S1_806_010;
+
+IF S1_806_010 <= 11.25 THEN
+	HouseBin10_Pounds = (((0.038 * HouseBin10_CubicFeet) + (1.12 * HouseBin10_SquareFeet) + (8.78 * s1_806_010) + 7.7)*40);
+ELSE
+	HouseBin10_Pounds = ((((S1_806_010 - 11.25) * 47.94) + 302.4) *40);
+END
+
+IF s1_806_010 > 0.5 THEN
+	HouseBin10_FeetLeft = 58.4 - S1_806_010;
+	HouseBin10_tonnes = HouseBin10_pounds / 2204.62;
+ELSE
+	HouseBin10_FeetLeft = 58.4;
+	HouseBin10_tonnes = 0;
+END
+
+
+
+//HouseBin 11 weight calculation.
+
+HouseBin11_cubicFeet = S1_806_011 * S1_806_011 * S1_806_011;
+HouseBin11_squareFeet =  S1_806_011 * S1_806_011;
+
+IF S1_806_011 <= 11.25 THEN
+	HouseBin11_Pounds = (((0.037 * HouseBin11_CubicFeet) + (1.08 * HouseBin11_SquareFeet) + (8.43 * s1_806_011) + 7.7)*40);
+ELSE
+	HouseBin11_Pounds = ((((S1_806_011 - 11.25) * 45.99) + 290.5) *40);
+END
+
+IF s1_806_011 > 0.5 THEN
+	HouseBin11_FeetLeft = 58.4 - S1_806_011;
+	HouseBin11_tonnes = HouseBin11_pounds / 2204.62;
+ELSE
+	HouseBin11_FeetLeft = 58.4;
+	HouseBin11_tonnes = 0;
+END
+
+
+//HouseBin 12 weight calculation.
+
+HouseBin12_cubicFeet = S1_806_012 * S1_806_012 * S1_806_012;
+HouseBin12_squareFeet =  S1_806_012 * S1_806_012;
+
+IF S1_806_012 <= 11.25 THEN
+	HouseBin12_Pounds = (((0.037 * HouseBin12_CubicFeet) + (1.08 * HouseBin12_SquareFeet) + (8.43 * s1_806_012) + 7.7)*40);
+ELSE
+	HouseBin12_Pounds = ((((S1_806_012 - 11.25) * 45.99) + 290.5) *40);
+END
+
+IF s1_806_012 > 0.5 THEN
+	HouseBin12_FeetLeft = 58.4 - S1_806_012;
+	HouseBin12_tonnes = HouseBin12_pounds / 2204.62;
+ELSE
+	HouseBin12_FeetLeft = 58.4;
+	HouseBin12_tonnes = 0;
+END
+
+
+
+//HouseBin 13 weight calculation.
+
+HouseBin13_cubicFeet = S1_806_013 * S1_806_013 * S1_806_013;
+HouseBin13_squareFeet =  S1_806_013 * S1_806_013;
+
+IF S1_806_013 <= 11.25 THEN
+	HouseBin13_Pounds = (((0.038 * HouseBin13_CubicFeet) + (1.12 * HouseBin13_SquareFeet) + (8.78 * s1_806_013) + 7.7)*40);
+ELSE
+	HouseBin13_Pounds = ((((S1_806_013 - 11.25) * 47.94) + 302.4) *40);
+END
+
+IF s1_806_013 > 0.5 THEN
+	HouseBin13_FeetLeft = 58.4 - S1_806_013;
+	HouseBin13_tonnes = HouseBin13_pounds / 2204.62;
+ELSE
+	HouseBin13_FeetLeft = 58.4;
+	HouseBin13_tonnes = 0;
+END
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+END

@@ -1,0 +1,33 @@
+FUNCTION
+StartDustC()
+INT iresult;
+
+	iResult = Message("Dust collector control", "Start dust collector ?", 1);
+		IF iResult = 0 THEN
+			s2_167_001_start = 1;
+			s2_167_001_stop = 0;
+			Sleep(2);
+			s2_167_001_start = 0;
+		ELSE
+			Message("Dust collector control", "Function cancelled by user.", 1);
+		END
+
+
+END
+
+FUNCTION
+StopDustC()
+INT iresult;
+
+	iResult = Message("Dust collector control", "Stop dust collector ?", 1);
+		IF iResult = 0 THEN
+			s2_167_001_start = 0;
+			s2_167_001_stop = 1;
+			Sleep(2);
+			s2_167_001_stop = 0;
+		ELSE
+			Message("Dust collector control", "Function cancelled by user.", 1);
+		END
+
+
+END

@@ -1,0 +1,58 @@
+//FUNCTIONS used to select Source House Bin for Transfer.
+
+
+FUNCTION
+BaggingSetupConventionalSource(STRING sSource)
+INT iResult;
+
+SELECT CASE sSource
+
+	CASE "ConventionalSelectBin5"
+		iResult = Message("Conventional Select Bin 5 Transfer", "Select Tranfer to House Bin 5 ?", 1);
+		IF iResult = 0 THEN
+			Conventional_SEL_5 = 1;
+			Sleep(2);
+			Conventional_SEL_5 = 0;
+		ELSE
+			Message("Conventional Select Bin 5 Transfer", "Action Cancelled", 0);
+		END			
+	CASE "ConventionalSelectBin7"
+		iResult = Message("Conventional Select Bin 7 Transfer", "Select Tranfer to House Bin 7 ?", 1);
+		IF iResult = 0 THEN
+			Conventional_SEL_7 = 1;
+			Sleep(2);
+			Conventional_SEL_7 = 0;
+		ELSE
+			Message("Conventional Select Bin 7 Transfer", "Action Cancelled", 0);
+		END		
+	CASE "Unselect"
+		iResult = Message("Conventional Source Bin Selection", "Unselect Bin ?", 1);
+		IF iResult = 0 THEN
+			Conventional_UNSEL = 1;
+			Sleep(2);
+			Conventional_UNSEL = 0;
+		ELSE
+			Message("Conventional Source Bin Selection", "Action Cancelled", 0);
+		END	
+	CASE "Start Transfer"
+		iResult = Message("Conventional Start Transfer", "Start Transfer ?", 1);
+		IF iResult = 0 THEN
+			Conventional_Start = 1;
+			Sleep(2);
+			Conventional_Start = 0;
+		ELSE
+			Message("Conventional Start Transfer", "Action Cancelled", 0);
+		END
+	CASE "Stop Transfer"
+		iResult = Message("Conventional Stop Transfer", "Stop Transfer ?", 1);
+		IF iResult = 0 THEN
+			Conventional_Stop = 1;
+			Sleep(2);
+			Conventional_Stop = 0;
+		ELSE
+			Message("Conventional Stop Transfer", "Action Cancelled", 0);
+		END
+		
+	END SELECT
+	
+END

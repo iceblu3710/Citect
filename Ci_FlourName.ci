@@ -1,0 +1,866 @@
+
+FUNCTION
+Call_FlourNameList(STRING sFlourType)
+STRING FullFlourTypeName1 = sFlourType + "_FlourName1";
+STRING FullFlourTypeName2 = sFlourType + "_FlourName2";
+STRING FullFlourTypeName3 = sFlourType + "_FlourName3";
+STRING FullFlourTypeName4 = sFlourType + "_FlourName4";
+STRING FullFlourTypeName5 = sFlourType + "_FlourName5";
+STRING FullFlourTypeName6 = sFlourType + "_FlourName6";
+STRING FullFlourTypeName7 = sFlourType + "_FlourName7";
+STRING FullFlourTypeName8 = sFlourType + "_FlourName8";
+STRING FullFlourTypeName9 = sFlourType + "_FlourName9";
+STRING FullFlourTypeName10 = sFlourType + "_FlourName10";
+STRING FullFlourTypeName11 = sFlourType + "_FlourName11";
+STRING FullFlourTypeName12 = sFlourType + "_FlourName12";
+STRING FullFlourTypeName13 = sFlourType + "_FlourName13";
+STRING FullFlourTypeName14 = sFlourType + "_FlourName14";
+STRING FullFlourTypeName15 = sFlourType + "_FlourName15";
+STRING FullFlourTypeName16 = sFlourType + "_FlourName16";
+STRING FullFlourTypeName17 = sFlourType + "_FlourName17";
+STRING FullFlourTypeName18 = sFlourType + "_FlourName18";
+STRING FullFlourTypeName19 = sFlourType + "_FlourName19";
+STRING FullFlourTypeName20 = sFlourType + "_FlourName20";
+STRING FullFlourTypeName21 = sFlourType + "_FlourName21";
+STRING sWinTitle = "'" + sFlourType + " flour Name list"; 		// ?90?
+STRING sType = "'" + sFLourType;								// ?91?
+
+AssVarTags(-2, 0, FullFlourTypeName1, FullFlourTypeName2, FullFlourTypeName3, FullFlourTypeName4, FullFlourTypeName5, FullFlourTypeName6, FullFlourTypeName7, FullFlourTypeName8);
+AssVarTags(-2, 8, FullFlourTypeName9, FullFlourTypeName10, FullFlourTypeName11, FullFlourTypeName12, FullFlourTypeName13, FullFlourTypeName14, FullFlourTypeName15, FullFlourTypeName16);
+AssVarTags(-2, 16, FullFlourTypeName17, FullFlourTypeName18, FullFlourTypeName19, FullFlourTypeName20, FullFlourTypeName21);
+AssVarTags(-2, 89, sWinTitle, sType);
+
+MyWinNewAt("!sg_flournamelist2")
+
+END
+
+
+FUNCTION
+ImportFlourNames()
+INT iConfirmOper;
+INT hfile;
+STRING sLine;
+STRING iLine;
+
+Beep(2);
+iConfirmOper = Message("Message from ImportFlourName Function", "Are you sure you want to load FLour Names from file? This action is not reversible.", 1);
+IF iConfirmOper <> 0 THEN
+	Message("Message from ImportFlourName Function", "Function Cancelled by user. No change done.", 0);
+	Halt();
+END
+
+ErrSet(1);
+hfile = FileOpen("[user]:\ph_sas\FlourNames.txt", "r");
+IF hfile = -1 THEN
+	Message("Error Import FlourName Function", "Unable to open file Import file.", 48);
+	Halt;
+END
+
+//extract line 1.
+sLine = FileReadLn(hfile);
+IF sLine <> "Flour name Export file." THEN
+	DealWithError(sLine);
+END
+//extract line 2. -Date and time.
+sLine = FileReadLn(hfile);
+//extract line 3. Empty line.
+sLine = FileReadLn(hfile);
+
+//extract line 4. Delimiter line.
+sLine = FileReadLn(hfile);
+//extract line 5. Patent Flour Name List.
+sLine = FileReadLn(hfile);
+IF sLine <> "Patent Flour names" THEN
+	DealWithError(sLine);
+END
+//Extract line 6. Delimiter Line.
+sLine = FileReadLn(hfile);
+
+//Extract Patent Flour name 1.
+sLine = FileReadLn(hfile);
+Patent_FlourName1 = sline;
+//Extract Patent Flour name 2.
+sLine = FileReadLn(hfile);
+Patent_FlourName2 = sline;
+//Extract Patent Flour name 3.
+sLine = FileReadLn(hfile);
+Patent_FlourName3 = sline;
+//Extract Patent Flour name 4.
+sLine = FileReadLn(hfile);
+Patent_FlourName4 = sline;
+//Extract Patent Flour name 5.
+sLine = FileReadLn(hfile);
+Patent_FlourName5 = sline;
+//Extract Patent Flour name 6.
+sLine = FileReadLn(hfile);
+Patent_FlourName6 = sline;
+//Extract Patent Flour name 7.
+sLine = FileReadLn(hfile);
+Patent_FlourName7 = sline;
+//Extract Patent Flour name 8.
+sLine = FileReadLn(hfile);
+Patent_FlourName8 = sline;
+//Extract Patent Flour name 9.
+sLine = FileReadLn(hfile);
+Patent_FlourName9 = sline;
+//Extract Patent Flour name 10.
+sLine = FileReadLn(hfile);
+Patent_FlourName10 = sline;
+//Extract Patent Flour name 11.
+sLine = FileReadLn(hfile);
+Patent_FlourName11 = sline;
+//Extract Patent Flour name 12.
+sLine = FileReadLn(hfile);
+Patent_FlourName12 = sline;
+//Extract Patent Flour name 13.
+sLine = FileReadLn(hfile);
+Patent_FlourName13 = sline;
+//Extract Patent Flour name 14.
+sLine = FileReadLn(hfile);
+Patent_FlourName14 = sline;
+//Extract Patent Flour name 15.
+sLine = FileReadLn(hfile);
+Patent_FlourName15 = sline;
+//Extract Patent Flour name 16.
+sLine = FileReadLn(hfile);
+Patent_FlourName16 = sline;
+//Extract Patent Flour name 17.
+sLine = FileReadLn(hfile);
+Patent_FlourName17 = sline;
+//Extract Patent Flour name 18.
+sLine = FileReadLn(hfile);
+Patent_FlourName18 = sline;
+//Extract Patent Flour name 19.
+sLine = FileReadLn(hfile);
+Patent_FlourName19 = sline;
+//Extract Patent Flour name 20.
+sLine = FileReadLn(hfile);
+Patent_FlourName20 = sline;
+//Extract Patent Flour name 21.
+sLine = FileReadLn(hfile);
+Patent_FlourName21 = sline;
+
+//extract delimiter line.	
+sLine = FileReadLn(hfile);	
+
+
+
+//extract Bakes Flour Name List.	
+sLine = FileReadLn(hfile);	
+IF sLine <> "Bakes Flour names" THEN	
+	DealWithError(sLine);
+END	
+//Extract delimiter Line.	
+sLine = FileReadLn(hfile);	
+	
+//Extract Bakes Flour name 1.	
+sLine = FileReadLn(hfile);	
+Bakers_FlourName1 = sline;	
+//Extract Bakes Flour name 2.	
+sLine = FileReadLn(hfile);	
+Bakers_FlourName2 = sline;	
+//Extract Bakes Flour name 3.	
+sLine = FileReadLn(hfile);	
+Bakers_FlourName3 = sline;	
+//Extract Bakes Flour name 4.	
+sLine = FileReadLn(hfile);	
+Bakers_FlourName4 = sline;	
+//Extract Bakes Flour name 5.	
+sLine = FileReadLn(hfile);	
+Bakers_FlourName5 = sline;	
+//Extract Bakes Flour name 6.	
+sLine = FileReadLn(hfile);	
+Bakers_FlourName6 = sline;	
+//Extract Bakes Flour name 7.	
+sLine = FileReadLn(hfile);	
+Bakers_FlourName7 = sline;	
+//Extract Bakes Flour name 8.	
+sLine = FileReadLn(hfile);	
+Bakers_FlourName8 = sline;	
+//Extract Bakes Flour name 9.	
+sLine = FileReadLn(hfile);	
+Bakers_FlourName9 = sline;	
+//Extract Bakes Flour name 10.	
+sLine = FileReadLn(hfile);	
+Bakers_FlourName10 = sline;	
+//Extract Bakes Flour name 11.	
+sLine = FileReadLn(hfile);	
+Bakers_FlourName11 = sline;	
+//Extract Bakes Flour name 12.	
+sLine = FileReadLn(hfile);	
+Bakers_FlourName12 = sline;	
+//Extract Bakes Flour name 13.	
+sLine = FileReadLn(hfile);	
+Bakers_FlourName13 = sline;	
+//Extract Bakes Flour name 14.	
+sLine = FileReadLn(hfile);	
+Bakers_FlourName14 = sline;	
+//Extract Bakes Flour name 15.	
+sLine = FileReadLn(hfile);	
+Bakers_FlourName15 = sline;	
+//Extract Bakes Flour name 16.	
+sLine = FileReadLn(hfile);	
+Bakers_FlourName16 = sline;	
+//Extract Bakes Flour name 17.	
+sLine = FileReadLn(hfile);	
+Bakers_FlourName17 = sline;	
+//Extract Bakes Flour name 18.	
+sLine = FileReadLn(hfile);	
+Bakers_FlourName18 = sline;	
+//Extract Bakes Flour name 19.	
+sLine = FileReadLn(hfile);	
+Bakers_FlourName19 = sline;	
+//Extract Bakes Flour name 20.	
+sLine = FileReadLn(hfile);	
+Bakers_FlourName20 = sline;	
+//Extract Bakes Flour name 21.	
+sLine = FileReadLn(hfile);	
+Bakers_FlourName21 = sline;	
+
+
+//extract delimiter line.	
+sLine = FileReadLn(hfile);	
+//extract Clears Flour Name List.	
+sLine = FileReadLn(hfile);	
+IF sLine <> "Clears Flour names" THEN	
+	DealWithError(sLine);
+END	
+//Extract delimiter Line.	
+sLine = FileReadLn(hfile);	
+	
+//Extract Clears Flour name 1.	
+sLine = FileReadLn(hfile);	
+Clears_FlourName1 = sline;	
+//Extract Clears Flour name 2.	
+sLine = FileReadLn(hfile);	
+Clears_FlourName2 = sline;	
+//Extract Clears Flour name 3.	
+sLine = FileReadLn(hfile);	
+Clears_FlourName3 = sline;	
+//Extract Clears Flour name 4.	
+sLine = FileReadLn(hfile);	
+Clears_FlourName4 = sline;	
+//Extract Clears Flour name 5.	
+sLine = FileReadLn(hfile);	
+Clears_FlourName5 = sline;	
+//Extract Clears Flour name 6.	
+sLine = FileReadLn(hfile);	
+Clears_FlourName6 = sline;	
+//Extract Clears Flour name 7.	
+sLine = FileReadLn(hfile);	
+Clears_FlourName7 = sline;	
+//Extract Clears Flour name 8.	
+sLine = FileReadLn(hfile);	
+Clears_FlourName8 = sline;	
+//Extract Clears Flour name 9.	
+sLine = FileReadLn(hfile);	
+Clears_FlourName9 = sline;	
+//Extract Clears Flour name 10.	
+sLine = FileReadLn(hfile);	
+Clears_FlourName10 = sline;	
+//Extract Clears Flour name 11.	
+sLine = FileReadLn(hfile);	
+Clears_FlourName11 = sline;	
+//Extract Clears Flour name 12.	
+sLine = FileReadLn(hfile);	
+Clears_FlourName12 = sline;	
+//Extract Clears Flour name 13.	
+sLine = FileReadLn(hfile);	
+Clears_FlourName13 = sline;	
+//Extract Clears Flour name 14.	
+sLine = FileReadLn(hfile);	
+Clears_FlourName14 = sline;	
+//Extract Clears Flour name 15.	
+sLine = FileReadLn(hfile);	
+Clears_FlourName15 = sline;	
+//Extract Clears Flour name 16.	
+sLine = FileReadLn(hfile);	
+Clears_FlourName16 = sline;	
+//Extract Clears Flour name 17.	
+sLine = FileReadLn(hfile);	
+Clears_FlourName17 = sline;	
+//Extract Clears Flour name 18.	
+sLine = FileReadLn(hfile);	
+Clears_FlourName18 = sline;	
+//Extract Clears Flour name 19.	
+sLine = FileReadLn(hfile);	
+Clears_FlourName19 = sline;	
+//Extract Clears Flour name 20.	
+sLine = FileReadLn(hfile);	
+Clears_FlourName20 = sline;	
+//Extract Clears Flour name 21.	
+sLine = FileReadLn(hfile);	
+Clears_FlourName21 = sline;	
+
+//extract delimiter line.	
+sLine = FileReadLn(hfile);	
+//extract FGrade Flour Name List.	
+sLine = FileReadLn(hfile);	
+IF sLine <> "FGrade Flour names" THEN	
+	DealWithError(sLine);
+END	
+//Extract delimiter Line.	
+sLine = FileReadLn(hfile);	
+	
+//Extract FGrade Flour name 1.	
+sLine = FileReadLn(hfile);	
+FGrade_FlourName1 = sline;	
+//Extract FGrade Flour name 2.	
+sLine = FileReadLn(hfile);	
+FGrade_FlourName2 = sline;	
+//Extract FGrade Flour name 3.	
+sLine = FileReadLn(hfile);	
+FGrade_FlourName3 = sline;	
+//Extract FGrade Flour name 4.	
+sLine = FileReadLn(hfile);	
+FGrade_FlourName4 = sline;	
+//Extract FGrade Flour name 5.	
+sLine = FileReadLn(hfile);	
+FGrade_FlourName5 = sline;	
+//Extract FGrade Flour name 6.	
+sLine = FileReadLn(hfile);	
+FGrade_FlourName6 = sline;	
+//Extract FGrade Flour name 7.	
+sLine = FileReadLn(hfile);	
+FGrade_FlourName7 = sline;	
+//Extract FGrade Flour name 8.	
+sLine = FileReadLn(hfile);	
+FGrade_FlourName8 = sline;	
+//Extract FGrade Flour name 9.	
+sLine = FileReadLn(hfile);	
+FGrade_FlourName9 = sline;	
+//Extract FGrade Flour name 10.	
+sLine = FileReadLn(hfile);	
+FGrade_FlourName10 = sline;	
+//Extract FGrade Flour name 11.	
+sLine = FileReadLn(hfile);	
+FGrade_FlourName11 = sline;	
+//Extract FGrade Flour name 12.	
+sLine = FileReadLn(hfile);	
+FGrade_FlourName12 = sline;	
+//Extract FGrade Flour name 13.	
+sLine = FileReadLn(hfile);	
+FGrade_FlourName13 = sline;	
+//Extract FGrade Flour name 14.	
+sLine = FileReadLn(hfile);	
+FGrade_FlourName14 = sline;	
+//Extract FGrade Flour name 15.	
+sLine = FileReadLn(hfile);	
+FGrade_FlourName15 = sline;	
+//Extract FGrade Flour name 16.	
+sLine = FileReadLn(hfile);	
+FGrade_FlourName16 = sline;	
+//Extract FGrade Flour name 17.	
+sLine = FileReadLn(hfile);	
+FGrade_FlourName17 = sline;	
+//Extract FGrade Flour name 18.	
+sLine = FileReadLn(hfile);	
+FGrade_FlourName18 = sline;	
+//Extract FGrade Flour name 19.	
+sLine = FileReadLn(hfile);	
+FGrade_FlourName19 = sline;	
+//Extract FGrade Flour name 20.	
+sLine = FileReadLn(hfile);	
+FGrade_FlourName20 = sline;	
+//Extract FGrade Flour name 21.	
+sLine = FileReadLn(hfile);	
+FGrade_FlourName21 = sline;	
+
+
+//extract delimiter line.	
+sLine = FileReadLn(hfile);	
+//extract LongPatent Flour Name List.	
+sLine = FileReadLn(hfile);	
+IF sLine <> "LongPatent Flour names" THEN	
+	DealWithError(sLine);
+END	
+//Extract delimiter Line.	
+sLine = FileReadLn(hfile);	
+	
+//Extract LongPatent Flour name 1.	
+sLine = FileReadLn(hfile);	
+LongPatent_FlourName1 = sline;	
+//Extract LongPatent Flour name 2.	
+sLine = FileReadLn(hfile);	
+LongPatent_FlourName2 = sline;	
+//Extract LongPatent Flour name 3.	
+sLine = FileReadLn(hfile);	
+LongPatent_FlourName3 = sline;	
+//Extract LongPatent Flour name 4.	
+sLine = FileReadLn(hfile);	
+LongPatent_FlourName4 = sline;	
+//Extract LongPatent Flour name 5.	
+sLine = FileReadLn(hfile);	
+LongPatent_FlourName5 = sline;	
+//Extract LongPatent Flour name 6.	
+sLine = FileReadLn(hfile);	
+LongPatent_FlourName6 = sline;	
+//Extract LongPatent Flour name 7.	
+sLine = FileReadLn(hfile);	
+LongPatent_FlourName7 = sline;	
+//Extract LongPatent Flour name 8.	
+sLine = FileReadLn(hfile);	
+LongPatent_FlourName8 = sline;	
+//Extract LongPatent Flour name 9.	
+sLine = FileReadLn(hfile);	
+LongPatent_FlourName9 = sline;	
+//Extract LongPatent Flour name 10.	
+sLine = FileReadLn(hfile);	
+LongPatent_FlourName10 = sline;	
+//Extract LongPatent Flour name 11.	
+sLine = FileReadLn(hfile);	
+LongPatent_FlourName11 = sline;	
+//Extract LongPatent Flour name 12.	
+sLine = FileReadLn(hfile);	
+LongPatent_FlourName12 = sline;	
+//Extract LongPatent Flour name 13.	
+sLine = FileReadLn(hfile);	
+LongPatent_FlourName13 = sline;	
+//Extract LongPatent Flour name 14.	
+sLine = FileReadLn(hfile);	
+LongPatent_FlourName14 = sline;	
+//Extract LongPatent Flour name 15.	
+sLine = FileReadLn(hfile);	
+LongPatent_FlourName15 = sline;	
+//Extract LongPatent Flour name 16.	
+sLine = FileReadLn(hfile);	
+LongPatent_FlourName16 = sline;	
+//Extract LongPatent Flour name 17.	
+sLine = FileReadLn(hfile);	
+LongPatent_FlourName17 = sline;	
+//Extract LongPatent Flour name 18.	
+sLine = FileReadLn(hfile);	
+LongPatent_FlourName18 = sline;	
+//Extract LongPatent Flour name 19.	
+sLine = FileReadLn(hfile);	
+LongPatent_FlourName19 = sline;	
+//Extract LongPatent Flour name 20.	
+sLine = FileReadLn(hfile);	
+LongPatent_FlourName20 = sline;	
+//Extract LongPatent Flour name 21.	
+sLine = FileReadLn(hfile);	
+LongPatent_FlourName21 = sline;	
+
+//extract delimiter line.	
+sLine = FileReadLn(hfile);	
+//extract Straight Flour Name List.	
+sLine = FileReadLn(hfile);	
+IF sLine <> "Straight Flour names" THEN	
+	DealWithError(sLine);
+END	
+//Extract delimiter Line.	
+sLine = FileReadLn(hfile);	
+	
+//Extract Straight Flour name 1.	
+sLine = FileReadLn(hfile);	
+Straight_FlourName1 = sline;	
+//Extract Straight Flour name 2.	
+sLine = FileReadLn(hfile);	
+Straight_FlourName2 = sline;	
+//Extract Straight Flour name 3.	
+sLine = FileReadLn(hfile);	
+Straight_FlourName3 = sline;	
+//Extract Straight Flour name 4.	
+sLine = FileReadLn(hfile);	
+Straight_FlourName4 = sline;	
+//Extract Straight Flour name 5.	
+sLine = FileReadLn(hfile);	
+Straight_FlourName5 = sline;	
+//Extract Straight Flour name 6.	
+sLine = FileReadLn(hfile);	
+Straight_FlourName6 = sline;	
+//Extract Straight Flour name 7.	
+sLine = FileReadLn(hfile);	
+Straight_FlourName7 = sline;	
+//Extract Straight Flour name 8.	
+sLine = FileReadLn(hfile);	
+Straight_FlourName8 = sline;	
+//Extract Straight Flour name 9.	
+sLine = FileReadLn(hfile);	
+Straight_FlourName9 = sline;	
+//Extract Straight Flour name 10.	
+sLine = FileReadLn(hfile);	
+Straight_FlourName10 = sline;	
+//Extract Straight Flour name 11.	
+sLine = FileReadLn(hfile);	
+Straight_FlourName11 = sline;	
+//Extract Straight Flour name 12.	
+sLine = FileReadLn(hfile);	
+Straight_FlourName12 = sline;	
+//Extract Straight Flour name 13.	
+sLine = FileReadLn(hfile);	
+Straight_FlourName13 = sline;	
+//Extract Straight Flour name 14.	
+sLine = FileReadLn(hfile);	
+Straight_FlourName14 = sline;	
+//Extract Straight Flour name 15.	
+sLine = FileReadLn(hfile);	
+Straight_FlourName15 = sline;	
+//Extract Straight Flour name 16.	
+sLine = FileReadLn(hfile);	
+Straight_FlourName16 = sline;	
+//Extract Straight Flour name 17.	
+sLine = FileReadLn(hfile);	
+Straight_FlourName17 = sline;	
+//Extract Straight Flour name 18.	
+sLine = FileReadLn(hfile);	
+Straight_FlourName18 = sline;	
+//Extract Straight Flour name 19.	
+sLine = FileReadLn(hfile);	
+Straight_FlourName19 = sline;	
+//Extract Straight Flour name 20.	
+sLine = FileReadLn(hfile);	
+Straight_FlourName20 = sline;	
+//Extract Straight Flour name 21.	
+sLine = FileReadLn(hfile);	
+Straight_FlourName21 = sline;	
+
+
+//extract delimiter line.	
+sLine = FileReadLn(hfile);	
+//extract Blend Flour Name List.	
+sLine = FileReadLn(hfile);	
+IF sLine <> "Blend Flour names" THEN	
+	DealWithError(sLine);
+END	
+//Extract delimiter Line.	
+sLine = FileReadLn(hfile);	
+	
+//Extract Blend Flour name 1.	
+sLine = FileReadLn(hfile);	
+Blend_FlourName1 = sline;	
+//Extract Blend Flour name 2.	
+sLine = FileReadLn(hfile);	
+Blend_FlourName2 = sline;	
+//Extract Blend Flour name 3.	
+sLine = FileReadLn(hfile);	
+Blend_FlourName3 = sline;	
+//Extract Blend Flour name 4.	
+sLine = FileReadLn(hfile);	
+Blend_FlourName4 = sline;	
+//Extract Blend Flour name 5.	
+sLine = FileReadLn(hfile);	
+Blend_FlourName5 = sline;	
+//Extract Blend Flour name 6.	
+sLine = FileReadLn(hfile);	
+Blend_FlourName6 = sline;	
+//Extract Blend Flour name 7.	
+sLine = FileReadLn(hfile);	
+Blend_FlourName7 = sline;	
+//Extract Blend Flour name 8.	
+sLine = FileReadLn(hfile);	
+Blend_FlourName8 = sline;	
+//Extract Blend Flour name 9.	
+sLine = FileReadLn(hfile);	
+Blend_FlourName9 = sline;	
+//Extract Blend Flour name 10.	
+sLine = FileReadLn(hfile);	
+Blend_FlourName10 = sline;	
+//Extract Blend Flour name 11.	
+sLine = FileReadLn(hfile);	
+Blend_FlourName11 = sline;	
+//Extract Blend Flour name 12.	
+sLine = FileReadLn(hfile);	
+Blend_FlourName12 = sline;	
+//Extract Blend Flour name 13.	
+sLine = FileReadLn(hfile);	
+Blend_FlourName13 = sline;	
+//Extract Blend Flour name 14.	
+sLine = FileReadLn(hfile);	
+Blend_FlourName14 = sline;	
+//Extract Blend Flour name 15.	
+sLine = FileReadLn(hfile);	
+Blend_FlourName15 = sline;	
+//Extract Blend Flour name 16.	
+sLine = FileReadLn(hfile);	
+Blend_FlourName16 = sline;	
+//Extract Blend Flour name 17.	
+sLine = FileReadLn(hfile);	
+Blend_FlourName17 = sline;	
+//Extract Blend Flour name 18.	
+sLine = FileReadLn(hfile);	
+Blend_FlourName18 = sline;	
+//Extract Blend Flour name 19.	
+sLine = FileReadLn(hfile);	
+Blend_FlourName19 = sline;	
+//Extract Blend Flour name 20.	
+sLine = FileReadLn(hfile);	
+Blend_FlourName20 = sline;	
+//Extract Blend Flour name 21.	
+sLine = FileReadLn(hfile);	
+Blend_FlourName21 = sline;	
+
+
+
+
+Message("Function ImportFlourNames", "Import function terminated normally", 0);
+
+
+FileClose(hfile);
+ErrSet(0);
+
+
+
+
+END
+
+
+
+
+
+FUNCTION
+DealWithError(STRING sline)
+Message("Error ImportFlourNames Function", "File is corrupt. Current line Extracted: -" + sLine +"- Import IS cancelled.", 48);
+Halt();
+END
+
+
+
+
+
+
+FUNCTION
+ExportFlourNames()
+INT hfile;
+
+ErrSet(1);
+hfile = FileOpen("[user]:\ph_sas\FlourNames.txt", "w");
+IF hfile = -1 THEN
+	Message("Error ExportFlourName Function", "Unable to open file export file.", 48);
+	Halt;
+END
+FileWriteLn(hfile, "Flour name Export file.");
+FileWriteLn(hfile, Date(9) + " " + Time(1));
+FileWriteLn(hfile, " ");
+FileWriteLn(hfile, "4-----------------------------");
+FileWriteLn(hfile, "Patent Flour Names");
+FileWriteLn(hfile, "6-----------------------------");
+FileWriteLn(hfile, Patent_FlourName1);
+FileWriteLn(hfile, Patent_FlourName2);
+FileWriteLn(hfile, Patent_FlourName3);
+FileWriteLn(hfile, Patent_FlourName4);
+FileWriteLn(hfile, Patent_FlourName5);
+FileWriteLn(hfile, Patent_FlourName6);
+FileWriteLn(hfile, Patent_FlourName7);
+FileWriteLn(hfile, Patent_FlourName8);
+FileWriteLn(hfile, Patent_FlourName9);
+FileWriteLn(hfile, Patent_FlourName10);
+FileWriteLn(hfile, Patent_FlourName11);
+FileWriteLn(hfile, Patent_FlourName12);
+FileWriteLn(hfile, Patent_FlourName13);
+FileWriteLn(hfile, Patent_FlourName14);
+FileWriteLn(hfile, Patent_FlourName15);
+FileWriteLn(hfile, Patent_FlourName16);
+FileWriteLn(hfile, Patent_FlourName17);
+FileWriteLn(hfile, Patent_FlourName18);
+FileWriteLn(hfile, Patent_FlourName19);
+FileWriteLn(hfile, Patent_FlourName20);
+FileWriteLn(hfile, Patent_FlourName21);
+FileWriteLn(hfile, "28-----------------------------");
+FileWriteLn(hfile, "Bakes Flour Names");
+FileWriteLn(hfile, "30-----------------------------");
+FileWriteLn(hfile, Bakers_FlourName1);
+FileWriteLn(hfile, Bakers_FlourName2);
+FileWriteLn(hfile, Bakers_FlourName3);
+FileWriteLn(hfile, Bakers_FlourName4);
+FileWriteLn(hfile, Bakers_FlourName5);
+FileWriteLn(hfile, Bakers_FlourName6);
+FileWriteLn(hfile, Bakers_FlourName7);
+FileWriteLn(hfile, Bakers_FlourName8);
+FileWriteLn(hfile, Bakers_FlourName9);
+FileWriteLn(hfile, Bakers_FlourName10);
+FileWriteLn(hfile, Bakers_FlourName11);
+FileWriteLn(hfile, Bakers_FlourName12);
+FileWriteLn(hfile, Bakers_FlourName13);
+FileWriteLn(hfile, Bakers_FlourName14);
+FileWriteLn(hfile, Bakers_FlourName15);
+FileWriteLn(hfile, Bakers_FlourName16);
+FileWriteLn(hfile, Bakers_FlourName17);
+FileWriteLn(hfile, Bakers_FlourName18);
+FileWriteLn(hfile, Bakers_FlourName19);
+FileWriteLn(hfile, Bakers_FlourName20);
+FileWriteLn(hfile, Bakers_FlourName21);
+FileWriteLn(hfile, "52-----------------------------");
+FileWriteLn(hfile, "Clears Flour Names");
+FileWriteLn(hfile, "54-----------------------------");
+FileWriteLn(hfile, Clears_FlourName1);
+FileWriteLn(hfile, Clears_FlourName2);
+FileWriteLn(hfile, Clears_FlourName3);
+FileWriteLn(hfile, Clears_FlourName4);
+FileWriteLn(hfile, Clears_FlourName5);
+FileWriteLn(hfile, Clears_FlourName6);
+FileWriteLn(hfile, Clears_FlourName7);
+FileWriteLn(hfile, Clears_FlourName8);
+FileWriteLn(hfile, Clears_FlourName9);
+FileWriteLn(hfile, Clears_FlourName10);
+FileWriteLn(hfile, Clears_FlourName11);
+FileWriteLn(hfile, Clears_FlourName12);
+FileWriteLn(hfile, Clears_FlourName13);
+FileWriteLn(hfile, Clears_FlourName14);
+FileWriteLn(hfile, Clears_FlourName15);
+FileWriteLn(hfile, Clears_FlourName16);
+FileWriteLn(hfile, Clears_FlourName17);
+FileWriteLn(hfile, Clears_FlourName18);
+FileWriteLn(hfile, Clears_FlourName19);
+FileWriteLn(hfile, Clears_FlourName20);
+FileWriteLn(hfile, Clears_FlourName21);
+FileWriteLn(hfile, "76-----------------------------");
+FileWriteLn(hfile, "FGrade Flour Names");
+FileWriteLn(hfile, "78-----------------------------");
+FileWriteLn(hfile, FGrade_FlourName1);
+FileWriteLn(hfile, FGrade_FlourName2);
+FileWriteLn(hfile, FGrade_FlourName3);
+FileWriteLn(hfile, FGrade_FlourName4);
+FileWriteLn(hfile, FGrade_FlourName5);
+FileWriteLn(hfile, FGrade_FlourName6);
+FileWriteLn(hfile, FGrade_FlourName7);
+FileWriteLn(hfile, FGrade_FlourName8);
+FileWriteLn(hfile, FGrade_FlourName9);
+FileWriteLn(hfile, FGrade_FlourName10);
+FileWriteLn(hfile, FGrade_FlourName11);
+FileWriteLn(hfile, FGrade_FlourName12);
+FileWriteLn(hfile, FGrade_FlourName13);
+FileWriteLn(hfile, FGrade_FlourName14);
+FileWriteLn(hfile, FGrade_FlourName15);
+FileWriteLn(hfile, FGrade_FlourName16);
+FileWriteLn(hfile, FGrade_FlourName17);
+FileWriteLn(hfile, FGrade_FlourName18);
+FileWriteLn(hfile, FGrade_FlourName19);
+FileWriteLn(hfile, FGrade_FlourName20);
+FileWriteLn(hfile, FGrade_FlourName21);
+FileWriteLn(hfile, "100-----------------------------");
+FileWriteLn(hfile, "LongPatent Flour Names");
+FileWriteLn(hfile, "102-----------------------------");
+FileWriteLn(hfile, LongPatent_FlourName1);
+FileWriteLn(hfile, LongPatent_FlourName2);
+FileWriteLn(hfile, LongPatent_FlourName3);
+FileWriteLn(hfile, LongPatent_FlourName4);
+FileWriteLn(hfile, LongPatent_FlourName5);
+FileWriteLn(hfile, LongPatent_FlourName6);
+FileWriteLn(hfile, LongPatent_FlourName7);
+FileWriteLn(hfile, LongPatent_FlourName8);
+FileWriteLn(hfile, LongPatent_FlourName9);
+FileWriteLn(hfile, LongPatent_FlourName10);
+FileWriteLn(hfile, LongPatent_FlourName11);
+FileWriteLn(hfile, LongPatent_FlourName12);
+FileWriteLn(hfile, LongPatent_FlourName13);
+FileWriteLn(hfile, LongPatent_FlourName14);
+FileWriteLn(hfile, LongPatent_FlourName15);
+FileWriteLn(hfile, LongPatent_FlourName16);
+FileWriteLn(hfile, LongPatent_FlourName17);
+FileWriteLn(hfile, LongPatent_FlourName18);
+FileWriteLn(hfile, LongPatent_FlourName19);
+FileWriteLn(hfile, LongPatent_FlourName20);
+FileWriteLn(hfile, LongPatent_FlourName21);
+FileWriteLn(hfile, "124-----------------------------");
+FileWriteLn(hfile, "Straight Flour Names");
+FileWriteLn(hfile, "126-----------------------------");
+FileWriteLn(hfile, Straight_FlourName1);
+FileWriteLn(hfile, Straight_FlourName2);
+FileWriteLn(hfile, Straight_FlourName3);
+FileWriteLn(hfile, Straight_FlourName4);
+FileWriteLn(hfile, Straight_FlourName5);
+FileWriteLn(hfile, Straight_FlourName6);
+FileWriteLn(hfile, Straight_FlourName7);
+FileWriteLn(hfile, Straight_FlourName8);
+FileWriteLn(hfile, Straight_FlourName9);
+FileWriteLn(hfile, Straight_FlourName10);
+FileWriteLn(hfile, Straight_FlourName11);
+FileWriteLn(hfile, Straight_FlourName12);
+FileWriteLn(hfile, Straight_FlourName13);
+FileWriteLn(hfile, Straight_FlourName14);
+FileWriteLn(hfile, Straight_FlourName15);
+FileWriteLn(hfile, Straight_FlourName16);
+FileWriteLn(hfile, Straight_FlourName17);
+FileWriteLn(hfile, Straight_FlourName18);
+FileWriteLn(hfile, Straight_FlourName19);
+FileWriteLn(hfile, Straight_FlourName20);
+FileWriteLn(hfile, Straight_FlourName21);
+FileWriteLn(hfile, "148-----------------------------");
+FileWriteLn(hfile, "Blend Flour Names");
+FileWriteLn(hfile, "150-----------------------------");
+FileWriteLn(hfile, Blend_FlourName1);
+FileWriteLn(hfile, Blend_FlourName2);
+FileWriteLn(hfile, Blend_FlourName3);
+FileWriteLn(hfile, Blend_FlourName4);
+FileWriteLn(hfile, Blend_FlourName5);
+FileWriteLn(hfile, Blend_FlourName6);
+FileWriteLn(hfile, Blend_FlourName7);
+FileWriteLn(hfile, Blend_FlourName8);
+FileWriteLn(hfile, Blend_FlourName9);
+FileWriteLn(hfile, Blend_FlourName10);
+FileWriteLn(hfile, Blend_FlourName11);
+FileWriteLn(hfile, Blend_FlourName12);
+FileWriteLn(hfile, Blend_FlourName13);
+FileWriteLn(hfile, Blend_FlourName14);
+FileWriteLn(hfile, Blend_FlourName15);
+FileWriteLn(hfile, Blend_FlourName16);
+FileWriteLn(hfile, Blend_FlourName17);
+FileWriteLn(hfile, Blend_FlourName18);
+FileWriteLn(hfile, Blend_FlourName19);
+FileWriteLn(hfile, Blend_FlourName20);
+FileWriteLn(hfile, Blend_FlourName21);
+FileWriteLn(hfile, "172-----------------------------");
+FileWriteLn(hfile, "End of list, closing file.");
+FileWriteLn(hfile, "174-----------------------------");
+
+FileClose(hfile);
+Message("Export", "Export finished normally",0);
+Beep(1);
+ErrSet(0);
+
+
+END
+
+
+//Function that open a alphanumeric keypad for operator to enter new flour name.
+// Created by Adam Rousseau, Schneider Electric Canada.
+
+STRING
+FUNCTION
+MyFncFlourName(INT sFlourNum, STRING sType)
+STRING sName;
+SELECT CASE sType
+	CASE "Patent"
+		sName = IntToStr(sFLourNum) + ". " + Keypad("", "", "", 0, "Enter new " + sType + " Flour Name");
+	CASE "Bakers"
+		sName = IntToStr(sFLourNum+21) + ". " + Keypad("", "", "", 0, "Enter new " + sType + " Flour Name");
+	CASE "Clears"
+		sName = IntToStr(sFLourNum+42) + ". " + Keypad("", "", "", 0, "Enter new " + sType + " Flour Name");
+	CASE "FGrade"
+		sName = IntToStr(sFLourNum+63) + ". " + Keypad("", "", "", 0, "Enter new " + sType + " Flour Name");
+	CASE "LongPatent"
+		sName = IntToStr(sFLourNum+84) + ". " + Keypad("", "", "", 0, "Enter new " + sType + " Flour Name");
+	CASE "Straight"
+		sName = IntToStr(sFLourNum+105) + ". " + Keypad("", "", "", 0, "Enter new " + sType + " Flour Name");
+	CASE "Blend"
+		sName = IntToStr(sFLourNum+126) + ". " + Keypad("", "", "", 0, "Enter new " + sType + " Flour Name");
+END SELECT
+// Validate if name is valid.
+IF StrLength(sName) < 4 THEN
+	Message("Message from Flour Name Function", "Flour name is not valid!", 48);
+	sName = TagRead(sType + "_FlourName" + IntToStr(sFlourNum));
+END
+		
+RETURN sName;
+END
+
+
+
+
+STRING
+FUNCTION
+MyFncDeleteFlourName(INT sFlourNum, STRING sType)
+INT result;
+
+result = Message("Please confirm action", "Are you sure you want to delete " + sType + " FlourName # " + IntToStr(sFlourNum) + " ?", 1);
+IF result = 0 THEN
+	RETURN ""
+END
+
+END
+
+
+
+
+

@@ -1,0 +1,31 @@
+//function for anto sampler
+//created by Adam Roussea, SE Canada.
+
+FUNCTION
+MyFncSampler()
+INT ierr;
+
+
+IF S1_360_Control = 1 THEN // when 1; Auto sampler in use.
+	ierr = Message("Auto Sampler Control", "Are you sure you want to turn Auto sampler OFF ?", 1);
+	IF ierr <> 0 THEN
+		Message("Auto Sampler Control", "Function Aborted by User.", 0);
+	ELSE
+		S1_360_Control = 0;
+		Message("Auto Sampler Control", "Auto Sampler Disabled", 0);
+		Halt();
+	END
+END
+	
+IF S1_360_Control = 0 THEN // when 0; Auto sampler NOT in use.
+	ierr = Message("Auto Sampler Control", "Are you sure you want to turn Auto sampler ON (auto disable in 10 minutes)", 1);
+	IF ierr <> 0 THEN
+		Message("Auto Sampler Control", "Function Aborted by User.", 0);
+	ELSE
+		S1_360_Control = 1;
+		Message("Auto Sampler Control", "Auto Sampler Enabled", 0);
+	END
+END
+
+END
+	

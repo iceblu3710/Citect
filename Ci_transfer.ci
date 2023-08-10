@@ -1,0 +1,871 @@
+// FUNCTIONS used in transfer setup page.
+
+
+//Select Blend Mode and Blend Flour Type.
+FUNCTION
+SelectTransferBlendType()
+
+INT hform;
+STRING sBuf;
+STRING sTempFlourType;
+INT i;
+
+	
+	hform = FormNew("Please Select Blend Flour Type", 60, 16, 0);
+	IF hform <> 0 THEN
+		Message("Error SelectTransferBlendType Function", "Unable to create form", 48);
+		Halt();
+	END
+	
+	
+	//Create Form and populate Blend Flour Type.
+	
+	FormListBox(2, 2, 50, 10, sbuf, 1);
+	
+	FOR i = 1 TO 30 DO
+		// populate list.
+		sTempFlourType = GetFlourType("Blend", i);
+		IF sTempFlourType <> "" THEN
+			FormAddList(sTempFlourType);
+		END
+	END
+	
+	FormPrompt(4, 1, "Please select BLEND Flour Type and press OK or press Cancel to close this window.");
+	
+	FormButton(1, 15, "           OK           ", 0, 1);
+	FormButton(35, 15, "         Cancel         ", 0, 2);
+	FormRead(0);
+	
+	TransferSetup_BlendFlourType = sBuf;
+	SleepMS(100);
+	
+
+END
+
+
+
+
+
+
+//Select Source Bin
+STRING
+FUNCTION
+SelectTransferSourceBin(INT iBlower, STRING sSourceBin)
+
+INT hform;
+STRING sBuf;
+
+hform = FormNew("Please Select Source BIN", 60, 16, 0);
+IF hform <> 0 THEN
+	Message("Error SelectTransferDestinationBin Function", "Unable to create form", 48);
+	Halt();
+END
+
+
+//Create Form AND populate Bin list according TO Blower and Blend Mode Selected.
+
+
+FormListBox(2, 2, 50, 10, sbuf, 1);
+IF transferSetup_Blower = 4 THEN
+	IF transferSetup_BlendMode = 1 THEN
+	//Blendmode is OFF
+		FormAddList("House Bin # 1");
+		FormAddList("House Bin # 9");
+		FormAddList("House Bin # 10");
+		FormAddList("House Bin # 2");
+		FormAddList("House Bin # 8");
+		FormAddList("House Bin # 11");
+	ELSE
+	//Blendmode is ON
+		FormAddList("House Bin # 1 & 9");
+		FormAddList("House Bin # 1 & 10");
+		FormAddList("House Bin # 9 & 10");
+		FormAddList("House Bin # 1, 9 & 10");
+		FormAddList("House Bin # 2 & 8");
+		FormAddList("House Bin # 2 & 11");
+		FormAddList("House Bin # 8 & 11");
+		FormAddList("House Bin # 2, 8 & 11");
+	END
+ELSE 
+	IF transferSetup_BlendMode = 1 THEN
+	//Blendmode is OFF
+		FormAddList("House Bin # 5");
+		FormAddList("House Bin # 6");
+		FormAddList("House Bin # 13");
+		FormAddList("House Bin # 3");
+		FormAddList("House Bin # 7");
+		FormAddList("House Bin # 12");
+	ELSE
+		//Blendmode is ON
+		FormAddList("House Bin # 5 & 6");
+		FormAddList("House Bin # 5 & 13");
+		FormAddList("House Bin # 6 & 13");
+		FormAddList("House Bin # 5, 6 & 13");
+		FormAddList("House Bin # 3 & 7");
+		FormAddList("House Bin # 3 & 12");
+		FormAddList("House Bin # 7 & 12");
+		FormAddList("House Bin # 3, 7 & 12");
+	END
+
+END
+
+FormPrompt(4, 1, "Please select SOURCE Bin from list and press OK or press Cancel to close this window.");
+
+FormButton(1, 15, "           OK           ", 0, 1);
+FormButton(35, 15, "         Cancel         ", 0, 2);
+FormRead(0);
+
+SleepMS(100);
+
+SELECT CASE sbuf
+	// bins from system 4
+	CASE "House Bin # 1"	
+		AssignSourceBinType(1, 0, 0);
+	CASE "House Bin # 9"	
+		AssignSourceBinType(9, 0, 0);
+	CASE "House Bin # 10"	
+		AssignSourceBinType(10, 0, 0);
+	CASE "House Bin # 1 & 9"	
+		AssignSourceBinType(1, 9, 0);
+	CASE "House Bin # 1 & 10"	
+		AssignSourceBinType(1, 10, 0);
+	CASE "House Bin # 9 & 10"	
+		AssignSourceBinType(9, 10, 0);
+	CASE "House Bin # 1, 9 & 10"	
+		AssignSourceBinType(1, 9, 10);
+	CASE "House Bin # 2"	
+		AssignSourceBinType(2, 0, 0);
+	CASE "House Bin # 8"	
+		AssignSourceBinType(8, 0, 0);
+	CASE "House Bin # 11"	
+		AssignSourceBinType(11, 0, 0);
+	CASE "House Bin # 2 & 8"	
+		AssignSourceBinType(2, 8, 0);
+	CASE "House Bin # 2 & 11"	
+		AssignSourceBinType(2, 11, 0);
+	CASE "House Bin # 8 & 11"	
+		AssignSourceBinType(8, 11, 0);
+	CASE "House Bin # 2, 8 & 11"	
+		AssignSourceBinType(2, 8, 11);
+		
+	// bins from system 5
+	CASE "House Bin # 5"	
+		AssignSourceBinType(5, 0, 0);
+	CASE "House Bin # 6"	
+		AssignSourceBinType(6, 0, 0);
+	CASE "House Bin # 13"	
+		AssignSourceBinType(13, 0, 0);
+	CASE "House Bin # 5 & 6"	
+		AssignSourceBinType(5, 6, 0);
+	CASE "House Bin # 5 & 13"	
+		AssignSourceBinType(5, 13, 0);
+	CASE "House Bin # 6 & 13"	
+		AssignSourceBinType(6, 13, 0);
+	CASE "House Bin # 5, 6 & 13"	
+		AssignSourceBinType(5, 6, 13);
+	CASE "House Bin # 3"	
+		AssignSourceBinType(3, 0, 0);
+	CASE "House Bin # 7"	
+		AssignSourceBinType(7, 0, 0);
+		TransferSetup_WOWsifter = 2;
+	CASE "House Bin # 12"	
+		AssignSourceBinType(12, 0, 0);
+	CASE "House Bin # 3 & 7"	
+		AssignSourceBinType(3, 7, 0);
+		TransferSetup_WOWsifter = 2;
+	CASE "House Bin # 3 & 12"	
+		AssignSourceBinType(3, 12, 0);
+	CASE "House Bin # 7 & 12"	
+		AssignSourceBinType(7, 12, 0);
+		TransferSetup_WOWsifter = 2;
+	CASE "House Bin # 3, 7 & 12"	
+		AssignSourceBinType(3, 7, 12);
+		TransferSetup_WOWsifter = 2;
+	
+END SELECT
+
+IF sbuf <> "- No selection made -" THEN
+	RETURN sbuf
+ELSE
+	RETURN ""
+END
+
+END
+
+
+
+//function used only in Select source Bin function. Its use is to update the text fields on "Transfer Setup" page.
+// created by Adam Rousseau, SE Canada.
+
+FUNCTION
+AssignSourceBinType(INT iBin1, INT iBin2, INT iBin3)
+STRING shouseBin1 = TagRead("HouseBin" + IntToStr(iBin1) + "_FlourType");
+STRING shouseBin2 = TagRead("HouseBin" + IntToStr(iBin2) + "_FlourType");
+STRING shouseBin3 = TagRead("HouseBin" + IntToStr(iBin3) + "_FlourType");
+
+
+TransferSetup_SourceBin1_Ftype =  "Bin " + IntToStr(iBin1) + " is filled with : " + sHouseBin1;
+IF iBin2 > 0 THEN
+	TransferSetup_SourceBin2_Ftype =  "Bin " + IntToStr(iBin2) + " is filled with : " + sHouseBin2;
+ELSE
+	TransferSetup_SourceBin2_Ftype =  "";
+END
+IF iBin3 > 0 THEN
+	TransferSetup_SourceBin3_Ftype =  "Bin " + IntToStr(iBin3) + " is filled with : " + sHouseBin3;
+ELSE
+	TransferSetup_SourceBin3_Ftype =  "";
+END
+
+END
+
+
+
+STRING
+FUNCTION
+SelectTransferDestinationBin(INT iBlower, STRING sSourceBin)
+
+INT hform;
+STRING sBuf;
+
+hform = FormNew("Please Select DESTINATION BIN", 60, 16, 0);
+IF hform <> 0 THEN
+	Message("Error SelectTransferDestinationBin Function", "Unable to create form", 48);
+	Halt();
+END
+FormListBox(2, 2, 50, 10, sbuf, 1);
+
+//Depending on system being setup, filter destination bins from the list.
+
+IF transferSetup_Blower = 4 THEN
+
+	//check if blower system #5 or gold dust is running.
+	IF s2_122_002_StatusAlarm = 2 BITOR PN_pb03_statusalarm = 2 THEN
+
+		//check if system 5 is using cross over and gold dust is running.
+		IF s2_163_007_StatusAlarm = 2 BITAND s2_163_008_StatusAlarm = 2 BITAND PN_pb03_statusalarm = 2 THEN
+
+			//system 5 is using cross over and gold dust is running.
+			ListSifter2PackingBinslessbind();
+			
+		ELSE	
+			IF s2_163_007_StatusAlarm = 1 BITAND s2_163_008_StatusAlarm = 1 THEN
+			// system 5 flow is direct.
+			ListSifter1PackingBins();
+		
+			ELSE
+			//system 5 is using cross over and gold dust is not running.
+			ListSifter2PackingBins();
+			
+			END
+		END	
+	ELSE
+		//Transfer 5 not running, all packing bins available.
+		ListSifter1PackingBins();
+		ListSifter2PackingBins();
+	END
+END
+
+IF transferSetup_Blower = 5 THEN
+
+	//check if blower system #4 or gold dust is running.
+	IF s2_122_001_StatusAlarm = 2 BITOR PN_pb03_statusalarm = 2 THEN
+
+		//check if system 4 is NOT using cross over or gold dust.
+		IF s2_163_005_StatusAlarm = 1 BITAND s2_163_006_StatusAlarm =1 BITAND PN_pb03_statusalarm = 2 THEN
+
+			// system 4 flow is direct and gold dust is running.
+			ListSifter2PackingBinslessbind()
+		
+		ELSE
+
+			//check if system 4 is NOT using cross over.
+			IF s2_163_005_StatusAlarm = 1 BITAND s2_163_006_StatusAlarm =1 BITAND PN_pb03_statusalarm = 1 THEN
+				
+				ListSifter2PackingBins()
+			
+			ELSE
+			//system 4 is using cross over.
+			ListSifter1PackingBins()
+			END
+		END
+	ELSE
+		//Transfer 4 not running, all packing bins available.
+		ListSifter1PackingBins();
+		ListSifter2PackingBins();
+	END
+END
+
+
+FormPrompt(4, 1, "Please select destination Bin from list and press OK or press Cancel to close this window.");
+
+FormButton(1, 15, "           OK           ", 0, 1);
+FormButton(35, 15, "         Cancel         ", 0, 2);
+FormRead(0);
+
+IF sbuf <> "" THEN
+	RETURN sbuf;
+ELSE
+	RETURN "- No selection made -";
+END
+
+SleepMS(500);
+END
+
+
+
+//Function used to list packing bins available from sifter 1.
+//Function called by SelectTransferDestinationBin()
+//Created by Adam Rousseau, SE Canada.
+FUNCTION
+ListSifter1PackingBins()
+
+	FormAddList("Packing Bin A"); //From Sifter 1
+	FormAddList("Packing Bin C"); //From Sifter 1
+	FormAddList("Packing Bin E"); //From Sifter 1
+	FormAddList("North Bulk Bin"); //From Sifter 1
+	FormAddList("South Bulk Bin"); //From Sifter 1
+//	FormAddList("Return To Mill"); //From Sifter 1
+
+END
+
+
+//Function used to list packing bins available from sifter 2.
+//Function called by SelectTransferDestinationBin()
+//Created by Adam Rousseau, SE Canada.
+FUNCTION
+ListSifter2PackingBins()
+
+	FormAddList("Packing Bin B"); //From Sifter 2
+	FormAddList("Packing Bin D"); //From Sifter 2
+	FormAddList("Packing Bin F"); //From Sifter 2
+	FormAddList("Bakery Bin #1"); //From Sifter 2
+	FormAddList("Bakery Bin #2"); //From Sifter 2
+END
+
+
+//Function used to list packing bins available from sifter 2.
+//Function called by SelectTransferDestinationBin()
+//Created by Adam Rousseau, SE Canada.
+FUNCTION
+ListSifter2PackingBinslessbind()
+
+	FormAddList("Packing Bin B"); //From Sifter 2
+	FormAddList("Packing Bin F"); //From Sifter 2
+	FormAddList("Bakery Bin #1"); //From Sifter 2
+	FormAddList("Bakery Bin #2"); //From Sifter 2
+END
+
+
+
+
+
+
+
+//function called from Transfer SEtup page (confirm button).
+
+FUNCTION TransferConfirm()
+INT iconfirm;
+STRING sSourceFlourType;
+
+
+Beep(1);
+iconfirm = Message("About to Perform Critical Operation", "Please press OK to confirm Packing Bin Transfer Scheme or press Cancel to abort.", 1);
+IF iconfirm <> 0 THEN
+	Beep(1);
+	Message("Packing Bins Fill Transfer", "Transfer Scheme ABORTED.", 0);
+	Halt();	
+END
+	//New TRansfer Setup Confirmed, update plc variables and reset temp variables.
+	//check if system 4 or 5 is selected to set source bin number to plc.
+	IF transferSetup_Blower = 4 THEN
+
+
+		// Transfer System 4 Source Bin	
+
+		Transfer4_currentSourceBin = transferSetup_SourceBin;
+
+		SELECT CASE transferSetup_SourceBin
+	
+		CASE "House Bin # 1"
+			SYSTEM4_PRODUCTIONRUN_0 = 1;
+			sSourceFlourType = HouseBin1_FlourType;
+		CASE "House Bin # 9"
+			SYSTEM4_PRODUCTIONRUN_0 = 2;
+			sSourceFlourType = HouseBin9_FlourType;
+		CASE "House Bin # 10"
+			SYSTEM4_PRODUCTIONRUN_0 = 3;
+			sSourceFlourType = HouseBin10_FlourType;
+		CASE "House Bin # 1 & 9"
+			SYSTEM4_PRODUCTIONRUN_0 = 4;
+			sSourceFlourType = MyFncSetBlenFlourType();
+		CASE "House Bin # 1 & 10"
+			SYSTEM4_PRODUCTIONRUN_0 = 5;
+			sSourceFlourType = MyFncSetBlenFlourType();
+		CASE "House Bin # 9 & 10"
+			SYSTEM4_PRODUCTIONRUN_0 = 6;
+			sSourceFlourType = MyFncSetBlenFlourType();
+		CASE "House Bin # 1, 9 & 10"
+			SYSTEM4_PRODUCTIONRUN_0 = 7;
+			sSourceFlourType = MyFncSetBlenFlourType();
+		CASE "House Bin # 2"
+			SYSTEM4_PRODUCTIONRUN_0 = 8;
+			sSourceFlourType = HouseBin2_FlourType;
+		CASE "House Bin # 8"
+			SYSTEM4_PRODUCTIONRUN_0 = 9;
+			sSourceFlourType = HouseBin8_FlourType;
+		CASE "House Bin # 11"
+			SYSTEM4_PRODUCTIONRUN_0 = 10;
+			sSourceFlourType = HouseBin11_FlourType;
+		CASE "House Bin # 2 & 8"
+			SYSTEM4_PRODUCTIONRUN_0 = 11;
+			sSourceFlourType = MyFncSetBlenFlourType();
+		CASE "House Bin # 2 & 11"
+			SYSTEM4_PRODUCTIONRUN_0 = 12;
+			sSourceFlourType = MyFncSetBlenFlourType();
+		CASE "House Bin # 8 & 11"
+			SYSTEM4_PRODUCTIONRUN_0 = 13;
+			sSourceFlourType = MyFncSetBlenFlourType();
+		CASE "House Bin # 2, 8 & 11"
+			SYSTEM4_PRODUCTIONRUN_0 = 14;
+			sSourceFlourType = MyFncSetBlenFlourType();
+		CASE ELSE
+			Message("error TransfertConfirm Function", "System 4 Source Bin selection does not match database", 48);
+			Halt();
+		END SELECT
+
+	//	System 4 Destination Bin
+		
+		Transfer4_currentDestinationbin = transferSetup_DestinationBin;
+		Transfer4_CurrentFlourType = sSourceFlourType;
+	
+		SELECT CASE transferSetup_DestinationBin
+			
+		CASE "Packing Bin A" //From Sifter 1
+			SYSTEM4_PRODUCTIONRUN_1 = 1;  // in FL code it was supposed to be 16, but when seting up a run it writes 1 not 11.
+			FlourTypePackingBinA = sSourceFlourType;
+		CASE "Packing Bin C" //From Sifter 1
+			SYSTEM4_PRODUCTIONRUN_1 = 2;  // in FL code it was supposed to be 16, but when seting up a run it writes 2 not 12.
+			FlourTypePackingBinC = sSourceFlourType;
+		CASE "Packing Bin E" //From Sifter 1
+			SYSTEM4_PRODUCTIONRUN_1 = 3; // guess
+			FlourTypePackingBinE = sSourceFlourType;
+		CASE "North Bulk Bin" //From Sifter 1
+			SYSTEM4_PRODUCTIONRUN_1 = 4; // guess
+			FlourTypeNorthBulk = sSourceFlourType;
+		CASE "South Bulk Bin" //From Sifter 1
+			SYSTEM4_PRODUCTIONRUN_1 = 5;  // in FL code it was supposed to be 16, but when seting up a run it writes 5 not 20.
+			FlourTypeSouthBulk = sSourceFlourType;
+		CASE "Return To Mill" //From Sifter 1
+			SYSTEM4_PRODUCTIONRUN_1 = 6;
+		
+		CASE "Packing Bin B" //From Sifter 2
+			SYSTEM4_PRODUCTIONRUN_1 = 8; // guess
+			FlourTypePackingBinB = sSourceFlourType;
+		CASE "Packing Bin D" //From Sifter 2
+			SYSTEM4_PRODUCTIONRUN_1 = 9;  // in FL code it was supposed to be 16, but when seting up a run it writes 9 not 16.
+			FlourTypePackingBinD = sSourceFlourType;
+		CASE "Packing Bin F" //From Sifter 2
+			SYSTEM4_PRODUCTIONRUN_1 = 10 // in FL code it was supposed to be 16, but when seting up a run it writes 10 not 18.
+			FlourTypePackingBinF = sSourceFlourType;
+		CASE "Bakery Bin #2" //From Sifter 2
+			SYSTEM4_PRODUCTIONRUN_1 = 11; // guess
+			FlourTypeBakery2 = sSourceFlourType;
+		CASE "Bakery Bin #1" //From Sifter 2
+			SYSTEM4_PRODUCTIONRUN_1 = 12; // guess
+			FlourTypeBakery1 = sSourceFlourType;
+		
+		CASE ELSE
+			Message("error TransfertConfirm Function", "System 4 Destination Bin selection does not match database", 48);
+			Halt();
+		END SELECT
+
+	SYSTEM4_PRODUCTIONRUN_3 = TransferSetup_WOWsifter;
+
+	Transfer4_currentWOWsifter = TransferSetup_WOWsifter;
+
+	SYSTEM4_PRODUCTIONRUN_4 = 0;
+	
+	
+	//Assign Target Weight parameter.
+	//Target weights have to be calculated based on maximum weight the bin can contain. The PLC expect raw values.
+	//new target weight / max weight in bin * max raw value.
+	IF transferSetup_TargetWeight > 0 THEN
+		SELECT CASE System4_ProductionRun_1
+		
+			CASE 1 //Packing Bin A
+				IF (TransferSetup_TargetWeight + S2_361_003) < 50 THEN
+					SYSTEM4_PRODUCTIONRUN_5 = (TransferSetup_TargetWeight + S2_361_003) / 55 * 4096;
+					Transfer4_currentTargetWeight = (TransferSetup_TargetWeight + S2_361_003);
+				ELSE
+					SYSTEM4_PRODUCTIONRUN_5 = 50 / 55 * 4096;
+				END
+			CASE 2 //Packing Bin C
+				IF (TransferSetup_TargetWeight + S2_361_005) < 50 THEN
+					SYSTEM4_PRODUCTIONRUN_5 = (TransferSetup_TargetWeight + S2_361_005) / 55 * 4096;
+					Transfer4_currentTargetWeight = (TransferSetup_TargetWeight + S2_361_005);
+				ELSE
+					SYSTEM4_PRODUCTIONRUN_5 = 50 / 55 * 4096;
+				END
+			CASE 3 //Packing Bin E
+				IF (TransferSetup_TargetWeight + S2_361_007) < 50 THEN
+					SYSTEM4_PRODUCTIONRUN_5 = (TransferSetup_TargetWeight + S2_361_007) / 55 * 4096;
+					Transfer4_currentTargetWeight = (TransferSetup_TargetWeight + S2_361_007);
+				ELSE
+					SYSTEM4_PRODUCTIONRUN_5 = 50 / 55 * 4096;
+				END
+			CASE 4 //North Bulk
+				IF (TransferSetup_TargetWeight + S2_361_002) < 65 THEN
+					SYSTEM4_PRODUCTIONRUN_5 = (TransferSetup_TargetWeight + S2_361_002) / 75 * 4096;
+					Transfer4_currentTargetWeight = (TransferSetup_TargetWeight + S2_361_002);
+				ELSE
+					SYSTEM4_PRODUCTIONRUN_5 = 65 / 75 * 4096;
+				END
+			CASE 5 //South Bulk
+				IF (TransferSetup_TargetWeight + S2_361_001) < 65 THEN
+					SYSTEM4_PRODUCTIONRUN_5 = (TransferSetup_TargetWeight + S2_361_001) / 75 * 4096;
+					Transfer4_currentTargetWeight = (TransferSetup_TargetWeight + S2_361_001);
+				ELSE
+					SYSTEM4_PRODUCTIONRUN_5 = 65 / 75 * 4096;
+				END
+			CASE 6 //Return to Mill
+				IF TransferSetup_TargetWeight < 65 THEN
+					SYSTEM4_PRODUCTIONRUN_5 = TransferSetup_TargetWeight;
+				ELSE
+					SYSTEM4_PRODUCTIONRUN_5 = 65;
+				END
+
+			CASE 8 //Packing Bin B
+				IF (TransferSetup_TargetWeight + S2_361_004) < 50 THEN
+					SYSTEM4_PRODUCTIONRUN_5 = (TransferSetup_TargetWeight + S2_361_004) / 55 * 4096;
+					Transfer4_currentTargetWeight = (TransferSetup_TargetWeight + S2_361_004);
+				ELSE
+					SYSTEM4_PRODUCTIONRUN_5 = 50 / 55 * 4096;
+				END
+			CASE 9 //Packing Bin D
+				IF (TransferSetup_TargetWeight + S2_361_006) < 50 THEN
+					SYSTEM4_PRODUCTIONRUN_5 = (TransferSetup_TargetWeight + S2_361_006) / 55 * 4096;
+					Transfer4_currentTargetWeight = (TransferSetup_TargetWeight + S2_361_006);
+				ELSE
+					SYSTEM4_PRODUCTIONRUN_5 = 50 / 55 * 4096;
+				END
+			CASE 10 //Packing Bin F
+				IF (TransferSetup_TargetWeight + S2_361_008) < 50 THEN
+					SYSTEM4_PRODUCTIONRUN_5 = (TransferSetup_TargetWeight + S2_361_008) / 55 * 4096;
+					Transfer4_currentTargetWeight = (TransferSetup_TargetWeight + S2_361_008);
+				ELSE
+					SYSTEM4_PRODUCTIONRUN_5 = 50 / 55 * 4096;
+				END
+			CASE 11 //Bakery # 2
+				IF (TransferSetup_TargetWeight + S2_361_003) < 23 THEN
+					SYSTEM4_PRODUCTIONRUN_5 = (TransferSetup_TargetWeight + S2_361_002) / 28.57 * 4096;
+					Transfer4_currentTargetWeight = (TransferSetup_TargetWeight + S2_361_002);
+				ELSE
+					SYSTEM4_PRODUCTIONRUN_5 = 23 / 28.57 * 4096;
+				END
+			CASE 12 //Bakery # 1
+				IF (TransferSetup_TargetWeight + S2_361_003) < 32 THEN
+					SYSTEM4_PRODUCTIONRUN_5 = (TransferSetup_TargetWeight + S2_361_002) / 40.05 * 4096;
+					Transfer4_currentTargetWeight = (TransferSetup_TargetWeight + S2_361_002);
+				ELSE
+					SYSTEM4_PRODUCTIONRUN_5 = 32 / 40.05 * 4096;
+				END
+
+		END SELECT
+	ELSE
+		SYSTEM4_PRODUCTIONRUN_5 = 0;	
+	END
+
+
+	SYSTEM4_PRODUCTIONRUN_6 = 1;
+	
+	Sleep(2);
+	SYSTEM4_PRODUCTIONRUN_6 = 2; // Proceed with new order.
+
+
+	
+	ELSE
+		// System 5
+		
+		Transfer5_currentSourceBin = transferSetup_SourceBin;
+		
+		SELECT CASE transferSetup_SourceBin
+	
+		CASE "House Bin # 5"
+			SYSTEM5_PRODUCTIONRUN_0 = 1;
+			sSourceFlourType = HouseBin5_FlourType;
+		CASE "House Bin # 6"
+			SYSTEM5_PRODUCTIONRUN_0 = 2;
+			sSourceFlourType = HouseBin6_FlourType;
+		CASE "House Bin # 13"
+			SYSTEM5_PRODUCTIONRUN_0 = 3;
+			sSourceFlourType = HouseBin13_FlourType;
+		CASE "House Bin # 5 & 6"
+			SYSTEM5_PRODUCTIONRUN_0 = 4;
+			sSourceFlourType = MyFncSetBlenFlourType();
+		CASE "House Bin # 5 & 13"
+			SYSTEM5_PRODUCTIONRUN_0 = 5
+			sSourceFlourType = MyFncSetBlenFlourType();
+		CASE "House Bin # 6 & 13"
+			SYSTEM5_PRODUCTIONRUN_0 = 6
+			sSourceFlourType = MyFncSetBlenFlourType();
+		CASE "House Bin # 5, 6 & 13"
+			SYSTEM5_PRODUCTIONRUN_0 = 7
+			sSourceFlourType = MyFncSetBlenFlourType();
+		CASE "House Bin # 3"
+			SYSTEM5_PRODUCTIONRUN_0 = 8
+			sSourceFlourType = HouseBin3_FlourType;
+		CASE "House Bin # 7"
+			SYSTEM5_PRODUCTIONRUN_0 = 9
+			sSourceFlourType = HouseBin7_FlourType;
+		CASE "House Bin # 12"
+			SYSTEM5_PRODUCTIONRUN_0 = 10
+			sSourceFlourType = HouseBin12_FlourType;
+		CASE "House Bin # 3 & 7"
+			SYSTEM5_PRODUCTIONRUN_0 = 11
+			sSourceFlourType = MyFncSetBlenFlourType();
+		CASE "House Bin # 3 & 12"
+			SYSTEM5_PRODUCTIONRUN_0 = 12
+			sSourceFlourType = MyFncSetBlenFlourType();
+		CASE "House Bin # 7 & 12"
+			SYSTEM5_PRODUCTIONRUN_0 = 13
+			sSourceFlourType = MyFncSetBlenFlourType();
+		CASE "House Bin # 3, 7 & 12"
+			SYSTEM5_PRODUCTIONRUN_0 = 14
+			sSourceFlourType = MyFncSetBlenFlourType();
+		CASE ELSE
+			Message("error TransfertConfirm Function", "System 5 Source Bin selection does not match database", 48);
+			Halt();
+		END SELECT
+	
+
+	//	System 5 Destination Bin
+		
+		Transfer5_currentDestinationbin = transferSetup_DestinationBin;
+		Transfer5_CurrentFlourType = sSourceFlourType;
+		
+		SELECT CASE transferSetup_DestinationBin
+			
+		CASE "Packing Bin A" //From Sifter 1
+			SYSTEM5_PRODUCTIONRUN_1 = 1;  // in FL code it was supposed to be 16, but when seting up a run it writes 1 not 11
+			FlourTypePackingBinA = sSourceFlourType;
+		CASE "Packing Bin C" //From Sifter 1
+			SYSTEM5_PRODUCTIONRUN_1 = 2;  // in FL code it was supposed to be 16, but when seting up a run it writes 9 not 15;
+			FlourTypePackingBinC = sSourceFlourType;
+		CASE "Packing Bin E" //From Sifter 1
+			SYSTEM5_PRODUCTIONRUN_1 = 3; //guess
+			FlourTypePackingBinE = sSourceFlourType;
+		CASE "North Bulk Bin" //From Sifter 1
+			SYSTEM5_PRODUCTIONRUN_1 = 4; // guess
+			FlourTypeNorthBulk = sSourceFlourType;
+		CASE "South Bulk Bin" //From Sifter 1
+			SYSTEM5_PRODUCTIONRUN_1 = 5; // guess
+			FlourTypeSouthBulk = sSourceFlourType;
+		CASE "Return To Mill" //From Sifter 1
+			SYSTEM5_PRODUCTIONRUN_1 = 6;
+
+		
+		CASE "Packing Bin B" //From Sifter 2
+			SYSTEM5_PRODUCTIONRUN_1 = 8; //guess
+			FlourTypePackingBinB = sSourceFlourType;
+		CASE "Packing Bin D" //From Sifter 2
+			SYSTEM5_PRODUCTIONRUN_1 = 9;  // in FL code it was supposed to be 16, but when seting up a run it writes 9 not 16.
+			FlourTypePackingBinD = sSourceFlourType;
+		CASE "Packing Bin F" //From Sifter 2
+			SYSTEM5_PRODUCTIONRUN_1 = 10 // in FL code it was supposed to be 16, but when seting up a run it writes 10 not 18.
+			FlourTypePackingBinF = sSourceFlourType;
+		CASE "Bakery Bin #2" //From Sifter 2
+			SYSTEM5_PRODUCTIONRUN_1 = 11; // guess
+			FlourTypeBakery2 = sSourceFlourType;
+		CASE "Bakery Bin #1" //From Sifter 2
+			SYSTEM5_PRODUCTIONRUN_1 = 12; //guess
+			FlourTypeBakery1 = sSourceFlourType;
+		
+		CASE ELSE
+			Message("error TransfertConfirm Function", "System 4 Destination Bin selection does not match database", 48);
+			Halt();
+		END SELECT
+
+
+	SYSTEM5_PRODUCTIONRUN_3 = TransferSetup_WOWsifter;
+	
+	Transfer5_currentWOWsifter = TransferSetup_WOWsifter;
+
+
+	
+	SYSTEM5_PRODUCTIONRUN_4 = 0;
+
+	
+	//Assign Target Weight parameter.
+	//Target weights have to be calculated based on maximum weight the bin can contain. The PLC expect raw values.
+	//new target weight / max weight in bin * max raw value.
+	IF transferSetup_TargetWeight > 0 THEN
+		SELECT CASE System5_ProductionRun_1
+		
+			CASE 1 //Packing Bin A
+				IF (TransferSetup_TargetWeight + S2_361_003) < 50 THEN
+					SYSTEM5_PRODUCTIONRUN_5 = (TransferSetup_TargetWeight + S2_361_003) / 55 * 4096;
+					Transfer5_currentTargetWeight = (TransferSetup_TargetWeight + S2_361_003);
+				ELSE
+					SYSTEM5_PRODUCTIONRUN_5 = 50 / 55 * 4096;
+				END
+			CASE 2 //Packing Bin C
+				IF (TransferSetup_TargetWeight + S2_361_005) < 50 THEN
+					SYSTEM5_PRODUCTIONRUN_5 = (TransferSetup_TargetWeight + S2_361_005) / 55 * 4096;
+					Transfer5_currentTargetWeight = (TransferSetup_TargetWeight + S2_361_005);
+				ELSE
+					SYSTEM5_PRODUCTIONRUN_5 = 50 / 55 * 4096;
+				END
+			CASE 3 //Packing Bin E
+				IF (TransferSetup_TargetWeight + S2_361_007) < 50 THEN
+					SYSTEM5_PRODUCTIONRUN_5 = (TransferSetup_TargetWeight + S2_361_007) / 55 * 4096;
+					Transfer5_currentTargetWeight = (TransferSetup_TargetWeight + S2_361_007);
+				ELSE
+					SYSTEM5_PRODUCTIONRUN_5 = 50 / 55 * 4096;
+				END
+			CASE 4 //North Bulk
+				IF (TransferSetup_TargetWeight + S2_361_002) < 65 THEN
+					SYSTEM5_PRODUCTIONRUN_5 = (TransferSetup_TargetWeight + S2_361_002) / 75 * 4096;
+					Transfer5_currentTargetWeight = (TransferSetup_TargetWeight + S2_361_002);
+				ELSE
+					SYSTEM5_PRODUCTIONRUN_5 = 65 / 75 * 4096;
+				END
+			CASE 5 //South Bulk
+				IF (TransferSetup_TargetWeight + S2_361_001) < 65 THEN
+					SYSTEM5_PRODUCTIONRUN_5 = (TransferSetup_TargetWeight + S2_361_001) / 75 * 4096;
+					Transfer5_currentTargetWeight = (TransferSetup_TargetWeight + S2_361_001);
+				ELSE
+					SYSTEM5_PRODUCTIONRUN_5 = 65 / 75 * 4096;
+				END
+			CASE 6 //Return to Mill
+				IF TransferSetup_TargetWeight < 65 THEN
+					SYSTEM5_PRODUCTIONRUN_5 = TransferSetup_TargetWeight;
+				ELSE
+					SYSTEM5_PRODUCTIONRUN_5 = 65;
+				END
+
+			CASE 8 //Packing Bin B
+				IF (TransferSetup_TargetWeight + S2_361_004) < 50 THEN
+					SYSTEM5_PRODUCTIONRUN_5 = (TransferSetup_TargetWeight + S2_361_004) / 55 * 4096;
+					Transfer5_currentTargetWeight = (TransferSetup_TargetWeight + S2_361_004);
+				ELSE
+					SYSTEM5_PRODUCTIONRUN_5 = 50 / 55 * 4096;
+				END
+			CASE 9 //Packing Bin D
+				IF (TransferSetup_TargetWeight + S2_361_006) < 50 THEN
+					SYSTEM5_PRODUCTIONRUN_5 = (TransferSetup_TargetWeight + S2_361_006) / 55 * 4096;
+					Transfer5_currentTargetWeight = (TransferSetup_TargetWeight + S2_361_006);
+				ELSE
+					SYSTEM5_PRODUCTIONRUN_5 = 50 / 55 * 4096;
+				END
+			CASE 10 //Packing Bin F
+				IF (TransferSetup_TargetWeight + S2_361_008) < 50 THEN
+					SYSTEM5_PRODUCTIONRUN_5 = (TransferSetup_TargetWeight + S2_361_008) / 55 * 4096;
+					Transfer5_currentTargetWeight = (TransferSetup_TargetWeight + S2_361_008);
+				ELSE
+					SYSTEM5_PRODUCTIONRUN_5 = 50 / 55 * 4096;
+				END
+			CASE 11 //Bakery # 2
+				IF (TransferSetup_TargetWeight + S2_361_003) < 23 THEN
+					SYSTEM5_PRODUCTIONRUN_5 = (TransferSetup_TargetWeight + S2_361_002) / 28.57 * 4096;
+					Transfer5_currentTargetWeight = (TransferSetup_TargetWeight + S2_361_003);
+				ELSE
+					SYSTEM5_PRODUCTIONRUN_5 = 23 / 28.57 * 4096;
+				END
+			CASE 12 //Bakery # 1
+				IF (TransferSetup_TargetWeight + S2_361_003) < 32 THEN
+					SYSTEM5_PRODUCTIONRUN_5 = (TransferSetup_TargetWeight + S2_361_002) / 40.05 * 4096;
+					Transfer5_currentTargetWeight = (TransferSetup_TargetWeight + S2_361_002);
+				ELSE
+					SYSTEM5_PRODUCTIONRUN_5 = 32 / 40.05 * 4096;
+				END
+
+		END SELECT
+	ELSE
+		SYSTEM5_PRODUCTIONRUN_5 = 0;	
+	END
+
+
+	SYSTEM5_PRODUCTIONRUN_6 = 1;
+
+	Sleep(2);
+	SYSTEM5_PRODUCTIONRUN_6 = 2; // Proceed with new order.
+
+		
+	END
+	Beep(2);
+	Message("Transfer confirmed", "Transfer completed successfully.", 0);
+
+
+	TransferSetup_Blower_mem = TransferSetup_Blower;
+	TransferSetup_BlendMode_mem = TransferSetup_BlendMode;
+	TransferSetup_SourceBin_mem = TransferSetup_SourceBin;
+	TransferSetup_DestinationBin_mem = TransferSetup_DestinationBin;
+	TransferSetup_SourceBinEmptyMode_mem = TransferSetup_SourceBinEmptyMode;
+	TransferSetup_WOWsifter_mem = TransferSetup_WOWsifter;
+	TransferSetup_DestinationFillMode_mem = TransferSetup_DestinationFillMode;
+	TransferSetup_TargetWeight_mem = TransferSetup_TargetWeight;
+	TransferSetup_SourceBin1_Ftype_mem = TransferSetup_SourceBin1_Ftype;
+	TransferSetup_SourceBin2_Ftype_mem = TransferSetup_SourceBin2_Ftype;
+	TransferSetup_SourceBin3_Ftype_mem = TransferSetup_SourceBin3_Ftype;
+	
+	
+	MyLogFnc("TransferSetup");
+
+	// clear temp values.
+	CancelTransfer();
+
+	PageDisplay("Transfer");
+
+
+END
+
+
+
+//reset all parameters to defaults.
+FUNCTION
+CancelTransfer()
+
+TransferSetup_Blower				=	0;
+CancelTransfer2()
+
+
+END
+
+// FUNCTION used in transfer setup page.
+//Reset all parameters BUT Blower. Used when changing source bin amongst other things.
+FUNCTION
+CancelTransfer2()
+
+TransferSetup_BlendMode				=	0;
+TransferSetup_SourceBin				=	"- No selection made -";
+TransferSetup_SourceBin1_Ftype		=	"";
+TransferSetup_SourceBin2_Ftype		=	"";
+TransferSetup_SourceBin3_Ftype		=	"";
+TransferSetup_DestinationBin		=	"- No selection made -";
+TransferSetup_SourceBinEmptyMode	=	0;
+TransferSetup_WOWsifter				=	0;
+TransferSetup_DestinationFillMode	=	0;
+TransferSetup_TargetWeight			=	0;
+
+END
+
+
+// FUNCTION to assign Blend Flour Type to Packing Bins.
+
+STRING
+FUNCTION
+MyFncSetBlenFlourType()
+INT iNumPos;
+INT iTempNum;
+STRING sBlendFlourType;
+
+	//extract flour number from flour name.
+	//locate ". " in flour name.
+	iNumPos = StrSearch(0,TransferSetup_BlendFLourType, ". ");
+	iTempNum = StrLeft(TransferSetup_BlendFLourType, iNumPos);
+	sBlendFlourType = StrMid(TransferSetup_BlendFLourType, iNumPos + 1, StrLength(TransferSetup_BlendFLourType)-iNumPos);
+	RETURN  sBlendFlourType;
+
+END
+
+

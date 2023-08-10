@@ -1,0 +1,871 @@
+//This function update the text object on the Bakers line to reflect the correct flour type on the bin depending on production chosen.
+//This function return a string shown on the Fill Run Setup page.
+//
+// Created by Adam Rousseau, SE Canada.
+
+STRING
+FUNCTION
+ShowBakersLineBinTitle(STRING sBinNum)
+STRING sFirstPart;
+STRING sMessage;
+
+SELECT CASE FillSetup_ProductionType
+
+	CASE "Full Grade"
+		sFirstPart = "Select Bakers ";
+	CASE "Straight"
+		sFirstPart = "Select Straight ";
+	CASE "F-Grade"
+		sFirstPart = "Select F-Grade ";
+	CASE "Long Patent"
+		sFirstPart = "Select Long Patent ";
+	CASE ELSE
+		sFirstPart = "Select Bakers ";
+
+END SELECT
+
+sMessage = sFirstPart + sBinNum + " Bin";
+
+RETURN sMessage
+
+END
+
+
+//This function update the text object on the Bakers line to reflect the correct flour type depending on production chosen.
+//This function return a string shown on the Fill Run Setup page.
+//
+// Created by Adam Rousseau, SE Canada.
+
+STRING
+FUNCTION
+ShowBakersLineTitle()
+SELECT CASE FillSetup_ProductionType
+
+	CASE "Full Grade"
+		RETURN "Select Bakers Flour Type"
+	CASE "Straight"
+		RETURN "Select Straight Flour Type"
+	CASE "F-Grade"
+		RETURN "Select F-Grade Flour Type"
+	CASE "Long Patent"
+		RETURN "Select Long Patent Flour Type"
+	CASE ELSE
+		RETURN "Select Bakers Flour Type"
+
+END SELECT
+END
+
+
+
+//This function is called from Fill Setup Page.
+//It will generate a message box with a list of FLour types to pick from.
+//The list will show the correct set of flour types depending on Production Run type and from which line the function was called.
+//
+//Created by Adam Rousseau, SE Canada.
+
+STRING
+FUNCTION
+SelectFillFlourType(STRING sFlour)
+INT i;
+INT hform;
+STRING sBuf;
+STRING sFlourType; 	    //Used for list population.
+STRING sTextFlourType;  //Used for display purpose.
+STRING sTempFlourType;
+
+//Bakers line is used for Straight, F-Grade and Long Patent FLour types.
+IF sFlour = "Bakers" THEN
+	SELECT CASE FillSetup_ProductionType	
+		CASE "Full Grade"
+			sFlourType = "Bakers";	
+			sTextFlourType = "Bakers";
+		CASE "Straight"
+			sFlourType = FillSetup_ProductionType;	
+			sTextFlourType = FillSetup_ProductionType;
+		CASE "F-Grade"
+			sFlourType = "FGrade";	
+			sTextFlourType = "F-Grade";
+		CASE "Long Patent"
+			sFlourType = "LongPatent";	
+			sTextFlourType = "Long Patent";
+	END SELECT
+ELSE
+	sFlourType = sFlour;
+	sTextFlourType = sFlour;
+END
+
+hform = FormNew("Select " + sTextFlourType + " Flour Type", 60, 16, 0);
+IF hform <> 0 THEN
+	Message("Error SelectFillFlourType Function", "Unable to create form", 48);
+	Halt();
+END
+FormListBox(6, 2, 50, 10, sbuf, 1);
+//Allow user to disable a flour type.
+FormAddList("- Not Used -");
+FOR i = 1 TO 30 DO
+	// populate list.
+	sTempFlourType = GetFlourType(sFlourType, i);
+	IF sTempFlourType <> "" THEN
+		FormAddList(sTempFlourType);
+	END
+END
+
+FormPrompt(4, 0, "  Please select a " + sFlourType + " Flour Type from the list.");
+FormPrompt(4, 1, "Press OK or press Cancel to close this window.");
+
+FormButton(1, 15, "           OK           ", 0, 1);
+FormButton(35, 15, "         Cancel         ", 0, 2);
+FormRead(0);
+
+// Check if all 3 source bins are disabled.
+IF sBuf = "- Not Used -" THEN
+	SELECT CASE sFlour
+		CASE "Patent"
+			IF FillSetup_BakersFlourType = "- Not Used -" BITAND FillSetup_ClearsFlourType = "- Not Used -" THEN
+				Beep(1);
+				Message("Error from SelectFillFlourType Function", "All three Flour sources are setup as - Not Used -. Please press OK and make another selection",48);
+				sbuf = "";
+			END
+		CASE "Bakers"
+			IF FillSetup_PatentFlourType = "- Not Used -" BITAND FillSetup_ClearsFlourType = "- Not Used -" THEN
+				Beep(1);
+				Message("Error from SelectFillFlourType Function", "All three Flour sources are setup as - Not Used -. Please press OK and make another selection",48);
+				sbuf = "";
+			END
+		CASE "Clears"
+			IF FillSetup_PatentFlourType = "- Not Used -" BITAND FillSetup_BakersFlourType = "- Not Used -" THEN
+				Beep(1);
+				Message("Error from SelectFillFlourType Function", "All three Flour sources are setup as - Not Used -. Please press OK and make another selection",48);
+				sbuf = "";
+			END
+	END SELECT
+END
+
+// Remove Bin selections if required.
+IF sBuf = "- Not Used -" BITOR sBuf = "" THEN
+	SELECT CASE sFlour
+		CASE "Patent"
+			FillSetup_Patent1Bin = "- No selection made -";
+			FillSetup_Patent2Bin = "- No selection made -";
+			FillSetup_Patent3Bin = "- No selection made -";
+		CASE "Bakers"
+			FillSetup_Bakers1Bin = "- No selection made -";
+			FillSetup_Bakers2Bin = "- No selection made -";
+			FillSetup_Bakers3Bin = "- No selection made -";
+		CASE "Clears"
+			FillSetup_Clears1Bin = "- No selection made -";
+			FillSetup_Clears2Bin = "- No selection made -";
+			FillSetup_Clears3Bin = "- No selection made -";
+	END SELECT
+END
+
+IF sbuf <> "" THEN
+	RETURN sbuf;
+ELSE
+	RETURN "- No selection made -";
+END
+SleepMS(500);
+END
+
+
+//Function to get Flour Type in DB.
+STRING
+FUNCTION
+GetFlourType(STRING sFlourType, INT i)
+STRING sTempFlourType = TagRead(sFlourType + "_FlourName" + IntToStr(i));
+RETURN sTempFlourType;
+
+END
+
+
+
+
+
+
+
+
+STRING
+FUNCTION
+SelectFillBin(STRING fType, INT iBin)
+INT i;
+INT hform;
+STRING sBuf;
+STRING sTempFlourType;
+
+
+hform = FormNew("Select Bin " + IntToStr(iBin) + " For " + FType + " Flour", 60, 16, 0);
+IF hform <> 0 THEN
+	Message("Error SelectFillBin Function", "Unable to create form", 48);
+	Halt();
+END
+FormListBox(2, 2, 50, 10, sbuf, 1);
+
+SELECT CASE FType
+
+	CASE "Patent"
+		CheckDuplicateAddList("House Bin # 5 ");
+		CheckDuplicateAddList("House Bin # 6 ");
+		CheckDuplicateAddList("House Bin # 10");
+		CheckDuplicateAddList("House Bin # 11");
+		CheckDuplicateAddList("House Bin # 12");
+		CheckDuplicateAddList("House Bin # 13");
+		CheckDuplicateAddList("House Bin # 7 ");
+
+	CASE "Bakers"
+		CheckDuplicateAddList("House Bin # 1 ");
+		CheckDuplicateAddList("House Bin # 2 ");
+		IF FillSetup_ProductionType = "Long Patent" THEN
+			CheckDuplicateAddList("House Bin # 5 ");
+			CheckDuplicateAddList("House Bin # 6 ");
+		END
+		CheckDuplicateAddList("House Bin # 7 ");
+		CheckDuplicateAddList("House Bin # 8 ");
+		CheckDuplicateAddList("House Bin # 9 ");
+		CheckDuplicateAddList("House Bin # 10");
+		CheckDuplicateAddList("House Bin # 11");
+		CheckDuplicateAddList("House Bin # 12");
+		IF FillSetup_ProductionType = "Long Patent" THEN
+			CheckDuplicateAddList("House Bin # 13 ");
+		END
+	
+	CASE "Clears"
+		CheckDuplicateAddList("House Bin # 2 ");
+		CheckDuplicateAddList("House Bin # 3 ");
+		CheckDuplicateAddList("House Bin # 7 ");
+		CheckDuplicateAddList("House Bin # 8 ");
+	
+END SELECT
+
+FormPrompt(4, 1, "Please select " + FType + " First Bin AND press OK OR press Cancel TO close this window.");
+FormButton(1, 15, "           OK           ", 0, 1);
+FormButton(35, 15, "         Cancel         ", 0, 2);
+FormRead(0);
+
+IF sbuf <> "" THEN
+
+
+
+	RETURN sbuf;
+ELSE
+	RETURN "- No selection made -";
+END
+
+SleepMS(500);
+END
+
+
+//Function that checks for duplicate in House bins before adding bin to the list.
+// This function is called from SelectFillBin function.
+// Created by Adam Rousseau, SE Canada.
+FUNCTION
+CheckDuplicateAddList(STRING sCheck)
+INT duplicate;
+
+IF FillSetup_Patent1Bin = sCheck THEN
+	duplicate = 1;
+END
+IF FillSetup_Patent2Bin = sCheck THEN
+	duplicate = 1;
+END
+IF FillSetup_Patent3Bin = sCheck THEN
+	duplicate = 1;
+END
+IF FillSetup_Bakers1Bin = sCheck THEN
+	duplicate = 1;
+END
+IF FillSetup_Bakers2Bin = sCheck THEN
+	duplicate = 1;
+END
+IF FillSetup_Bakers3Bin = sCheck THEN
+	duplicate = 1;
+END
+IF FillSetup_Clears1Bin = sCheck THEN
+	duplicate = 1;
+END
+IF FillSetup_Clears2Bin = sCheck THEN
+	duplicate = 1;
+END
+IF FillSetup_Clears3Bin = sCheck THEN
+	duplicate = 1;
+END
+
+IF duplicate = 0 THEN
+	FormAddList(sCheck);
+END
+
+END
+
+
+
+//Function used to validate and animate the confirm button on FillSetup page.
+//Returns the amount of missing parameters.
+//Function created by Adam Rousseau, SE Canada.
+INT
+FUNCTION
+FillSetup_CheckFillTransfer()
+INT validate; // This variable is used to show how many parameters are still required before confirm can be done.
+
+
+// If Bin not set to Not Used, check for a value in Bin1. We dont check second and third bins.
+
+SELECT CASE FillSetup_ProductionType
+
+	CASE "Full Grade"
+		//All Flour lines required
+		IF FillSetup_PatentFlourType = "- No selection made -" THEN
+			validate = validate + 2;
+		ELSE
+			IF FillSetup_PatentFlourType <> "- Not Used -" THEN
+				IF FillSetup_Patent1bin = "- No selection made -" THEN
+					validate = validate + 1;
+				END
+			END
+		END
+		IF FillSetup_BakersFlourType = "- No selection made -" THEN
+			validate = validate + 2;
+		ELSE
+			IF FillSetup_BakersFlourType <> "- Not Used -" THEN
+				IF FillSetup_Bakers1bin = "- No selection made -" THEN
+					validate = validate + 1;
+				END
+			END
+		END
+		IF FillSetup_ClearsFlourType = "- No selection made -" THEN
+			validate = validate + 2;
+		ELSE
+			IF FillSetup_ClearsFlourType <> "- Not Used -" THEN
+				IF FillSetup_Clears1bin = "- No selection made -" THEN
+					validate = validate + 1;
+				END
+			END
+		END
+	CASE "F-Grade"
+		//Only Patent and Bakers line required.
+		IF FillSetup_PatentFlourType = "- No selection made -" THEN
+			validate = validate + 2;
+		ELSE
+			IF FillSetup_PatentFlourType <> "- Not Used -" THEN
+				IF FillSetup_Patent1bin = "- No selection made -" THEN
+					validate = validate + 1;
+				END
+			END
+		END
+		IF FillSetup_BakersFlourType = "- No selection made -" THEN
+			validate = validate + 2;
+		ELSE
+			IF FillSetup_BakersFlourType <> "- Not Used -" THEN
+				IF FillSetup_Bakers1bin = "- No selection made -" THEN
+					validate = validate + 1;
+				END
+			END
+		END
+
+	CASE "Straight"
+		//Only PBakers line required.
+		IF FillSetup_BakersFlourType = "- No selection made -" THEN
+			validate = validate + 2;
+		ELSE
+			IF FillSetup_BakersFlourType <> "- Not Used -" THEN
+				IF FillSetup_Bakers1bin = "- No selection made -" THEN
+					validate = validate + 1;
+				END
+			END
+		END
+
+	CASE "Long Patent"
+		//Only Bakers and Clears line required.
+		IF FillSetup_BakersFlourType = "- No selection made -" THEN
+			validate = validate + 2;
+		ELSE
+			IF FillSetup_BakersFlourType <> "- Not Used -" THEN
+				IF FillSetup_Bakers1bin = "- No selection made -" THEN
+					validate = validate + 1;
+				END
+			END
+		END
+		IF FillSetup_ClearsFlourType = "- No selection made -" THEN
+			validate = validate + 2;
+		ELSE
+			IF FillSetup_ClearsFlourType <> "- Not Used -" THEN
+				IF FillSetup_Clears1bin = "- No selection made -" THEN
+					validate = validate + 1;
+				END
+			END
+		END
+	CASE ELSE
+		validate = validate + 2;
+	
+END SELECT
+
+
+IF FillSetup_HeadEndBinMode = 0 THEN
+	validate = validate + 1;
+END
+IF FillSetup_ExchangeBinMode = 0 THEN
+	validate = validate + 1;
+END
+SELECT CASE FillSetup_BranFeedMode
+	CASE 0
+		validate = validate + 2;
+	CASE 2
+		IF FillSetup_BranFeedSpeed = 0 THEN
+			validate = validate + 1;
+		END
+END SELECT
+SELECT CASE FillSetup_RunTimeMode
+	CASE 0
+		validate = validate + 2;
+	CASE 2
+		IF FillSetup_RunTimeTime = 0 THEN
+			validate = validate + 1;
+		END
+END SELECT
+IF FillSetup_ProductionType = "- No selection made -" THEN
+	validate = validate + 1;
+END
+
+RETURN validate;
+END
+
+
+
+// Function that writes the data to the PLC.
+FUNCTION
+FillConfirm()
+INT TempProdType;
+INT iconfirm;
+INT ierr;
+INT iTemp;
+INT iNumPos;
+INT iTempNum;
+STRING sClearsFlourType;
+STRING sBakersFlourType;
+STRING sPatentFlourType;
+INT Maxdelay=0;
+INT TempBranScrewON=0;
+
+Beep(1);
+iconfirm = Message("About to Perform Critical Operation", "Please press OK to confirm Fill Transfer Scheme or press Cancel to abort.", 1);
+IF iconfirm <> 0 THEN
+	Beep(1);
+	Message("Fill Transfer", "Fill Transfer Scheme ABORTED.", 0);
+	Halt();	
+END
+	//transfer to PLC variables here.
+	SELECT CASE FillSetup_ProductionType
+		CASE "Full Grade"
+			ierr = TagWrite("FILL_ProductionRun_0", 1);
+			TempProdType = 1;
+		CASE "F-Grade"
+			ierr = TagWrite("FILL_ProductionRun_0", 2);
+			TempProdType = 2;
+		CASE "Straight"
+			ierr = TagWrite("FILL_ProductionRun_0", 3);
+			TempProdType = 3;
+		CASE "Long Patent"
+			ierr = TagWrite("FILL_ProductionRun_0", 4);
+			TempProdType = 4;
+	END SELECT
+	CheckWrite(ierr, "Fill_ProductionRun_0");
+
+	ierr = TagWrite("FILL_ProductionRun_1", GetBinNumber("FillSetup_CLEARS1Bin"));
+	CheckWrite(ierr, "FillSetup_CLEARS1Bin");
+	ierr = TagWrite("FILL_ProductionRun_2", GetBinNumber("FillSetup_CLEARS2Bin"));
+	CheckWrite(ierr, "FillSetup_CLEARS2Bin");
+	ierr = TagWrite("FILL_ProductionRun_3", GetBinNumber("FillSetup_CLEARS3Bin"));
+	CheckWrite(ierr, "FillSetup_CLEARS3Bin");
+	ierr = TagWrite("FILL_ProductionRun_4", GetBinNumber("FillSetup_BAKERS1Bin"));
+	CheckWrite(ierr, "FillSetup_BAKERS1Bin");
+	ierr = TagWrite("FILL_ProductionRun_5", GetBinNumber("FillSetup_BAKERS2Bin"));
+	CheckWrite(ierr, "FillSetup_BAKERS2Bin");
+	ierr = TagWrite("FILL_ProductionRun_6", GetBinNumber("FillSetup_BAKERS3Bin"));
+	CheckWrite(ierr, "FillSetup_BAKERS3Bin");
+	ierr = TagWrite("FILL_ProductionRun_7", GetBinNumber("FillSetup_PATENT1Bin"));
+	CheckWrite(ierr, "FillSetup_PATENT1Bin");
+	ierr = TagWrite("FILL_ProductionRun_8", GetBinNumber("FillSetup_PATENT2Bin"));
+	CheckWrite(ierr, "FillSetup_PATENT2Bin");
+	ierr = TagWrite("FILL_ProductionRun_9", GetBinNumber("FillSetup_PATENT3Bin"));
+	CheckWrite(ierr, "FillSetup_PATENT3Bin");
+	
+	//extract flour number from flour name.
+	//locate ". " in flour name.
+	iNumPos = StrSearch(0,FillSetup_ClearsFlourType, ". ");
+	iTempNum = StrLeft(FillSetup_ClearsFlourType, iNumPos);
+	sClearsFlourType = StrMid(FillSetup_ClearsFlourType, iNumPos + 1, StrLength(FillSetup_ClearsFlourType)-iNumPos);
+	//write flour number to plc.
+	ierr = TagWrite("FILL_ProductionRun_10", iTempNum);
+	CheckWrite(ierr, "Fill_ProductionRun_10");
+	
+
+
+	//extract flour number from flour name.
+	//locate ". " in flour name.
+	iNumPos = StrSearch(0,FillSetup_BakersFlourType, ". ");
+	iTempNum = StrLeft(FillSetup_BakersFlourType, iNumPos);
+	sBakersFlourType = StrMid(FillSetup_BakersFlourType, iNumPos + 1, StrLength(FillSetup_BakersFlourType)-iNumPos);
+	//write flour number to plc.
+	ierr = TagWrite("FILL_ProductionRun_11", iTempNum);
+	CheckWrite(ierr, "Fill_ProductionRun_11");
+
+
+	//extract flour number from flour name.
+	//locate ". " in flour name.
+	iNumPos = StrSearch(0,FillSetup_PatentFlourType, ". ");
+	iTempNum = StrLeft(FillSetup_PatentFlourType, iNumPos);
+	sPatentFlourType = StrMid(FillSetup_PatentFlourType, iNumPos + 1, StrLength(FillSetup_PatentFlourType)-iNumPos);
+	//write flour number to plc.
+	ierr = TagWrite("FILL_ProductionRun_12", iTempNum);
+	CheckWrite(ierr, "Fill_ProductionRun_12");
+
+	// Set Flour Types in Bins. For Display purpose only. Not going to PLC.
+
+
+	ierr = TagWrite("FILL_ProductionRun_13", 0); // No information found in Monitor Pro.
+	CheckWrite(ierr, "param13 unknown");
+	ierr = TagWrite("FILL_ProductionRun_14", FillSetup_ExchangeBinMode);
+	CheckWrite(ierr, "FillSetup_ExchangeBinMode");
+	ierr = TagWrite("FILL_ProductionRun_15", FillSetup_HeadEndBinMode);
+	CheckWrite(ierr, "FillSetup_HeadEndBinMode");
+
+
+//==================================================================================================
+//
+//
+//
+
+	ierr = TagWrite("FILL_ProductionRun_50", FillSetup_Bin3FeedMode);
+	CheckWrite(ierr, "FillSetup_Bin3FeedMode");
+	ierr = TagWrite("FILL_ProductionRun_51", FillSetup_bin3FeedSpeed);
+	CheckWrite(ierr, "FillSetup_bin3FeedSpeed");
+	FILL_ProductionRun_50 = FillSetup_Bin3FeedMode;
+	FILL_ProductionRun_51 = FillSetup_bin3FeedSpeed;
+//
+//
+//==================================================================================================
+
+
+
+	//Check if Bran screw conveyor use in new run differs from last run. If so, trap the change until
+	//selector switches are switched to "Exchange Bin" then back to "normal". Only then the change to Bran screw is made.
+	// 2013-02-11 This does not work at the moment.
+
+	//the way the old system works is the bran screw conveyor does not start right away when the new run is sent.
+	//The parameter is set nonetheless, and only after the switches are moved to "exchange" then back to "normal" will the bran screw start.
+	
+	
+//	IF Fill_ProductionRun_16 = FillSetup_BranFeedMode THEN
+			//No change to Bran Screw conveyor.
+			ierr = TagWrite("FILL_ProductionRun_16", FillSetup_BranFeedMode);
+			CheckWrite(ierr, "FillSetup_BranFeedMode");
+			ierr = TagWrite("FILL_ProductionRun_17", FillSetup_BranFeedSpeed);
+			CheckWrite(ierr, "FillSetup_BranFeedSpeed");
+// ELSE 
+			//Change in new run. Either Bran SC was running and now it will not, or it was not and will start in new run.
+//			TempBranScrewON = 1;
+			//load temp values in memory.
+//			FILL_ProductionRun_1_mem = FILL_ProductionRun_1;
+//			FILL_ProductionRun_2_mem = FILL_ProductionRun_2;
+//			FILL_ProductionRun_3_mem = FILL_ProductionRun_3;
+//			FILL_ProductionRun_4_mem = FILL_ProductionRun_4;
+//			FILL_ProductionRun_5_mem = FILL_ProductionRun_5;
+//			FILL_ProductionRun_6_mem = FILL_ProductionRun_6;
+//			FILL_ProductionRun_7_mem = FILL_ProductionRun_7;
+//			FILL_ProductionRun_8_mem = FILL_ProductionRun_8;
+//			FILL_ProductionRun_9_mem = FILL_ProductionRun_9;
+//			FILL_ProductionRun_10_mem = FILL_ProductionRun_10;
+//			FILL_ProductionRun_11_mem = FILL_ProductionRun_11;
+//			FILL_ProductionRun_12_mem = FILL_ProductionRun_12;
+//			FILL_ProductionRun_13_mem = FILL_ProductionRun_13;
+//			FILL_ProductionRun_14_mem = FILL_ProductionRun_14;
+//			FILL_ProductionRun_15_mem = FILL_ProductionRun_15;
+//
+//			
+//			ierr = TagWrite("FILL_ProductionRun_16", Fill_ProductionRun_16);
+//			CheckWrite(ierr, "FillSetup_BranFeedMode");
+//			ierr = TagWrite("FILL_ProductionRun_17", Fill_ProductionRun_17);
+//			CheckWrite(ierr, "FillSetup_BranFeedSpeed");
+		
+//	END
+
+	// Here we set this parameter to "1" to preload the new run.
+	ierr = TagWrite("FILL_ProductionRun_18", 1);
+	CheckWrite(ierr, "param18 confirm run");
+
+	Sleep(2);
+	// Here we set this parameter to "2" to enable to new run.
+	ierr = TagWrite("FILL_ProductionRun_18", 2);
+	CheckWrite(ierr, "param18 confirm run");
+
+
+
+	Message("Fill Transfer", "Fill Transfer Scheme CONFIRMED.", 0);
+	
+	//sets parameters for Re-Feed function.
+	//keeps last run setup in memory in case a similar run or changes needs to be done.
+	FillSetup_PatentFlourType_mem = FillSetup_PatentFlourType;
+	FillSetup_Patent1bin_mem = FillSetup_Patent1bin;
+	FillSetup_Patent2bin_mem = FillSetup_Patent2bin;
+	FillSetup_Patent3bin_mem = FillSetup_Patent3bin;
+	FillSetup_BakersFlourType_mem = FillSetup_BakersFlourType;
+	FillSetup_Bakers1bin_mem = FillSetup_Bakers1bin;
+	FillSetup_Bakers2bin_mem = FillSetup_Bakers2bin;
+	FillSetup_Bakers3bin_mem = FillSetup_Bakers3bin;
+	FillSetup_ClearsFlourType_mem = FillSetup_ClearsFlourType;
+	FillSetup_Clears1bin_mem = FillSetup_Clears1bin;
+	FillSetup_Clears2bin_mem = FillSetup_Clears2bin;
+	FillSetup_Clears3bin_mem = FillSetup_Clears3bin;
+	FillSetup_HeadEndBinMode_mem = FillSetup_HeadEndBinMode;
+	FillSetup_ExchangeBinMode_mem = FillSetup_ExchangeBinMode;
+	FillSetup_BranFeedMode_mem = FillSetup_BranFeedMode;
+	FillSetup_BranFeedSpeed_mem = FillSetup_BranFeedSpeed;
+	
+	FillSetup_Bin3FeedMode_mem = FillSetup_Bin3FeedMode;
+	FillSetup_Bin3FeedSpeed_mem = FillSetup_Bin3FeedSpeed;
+	
+	FillSetup_RunTimeMode_mem = FillSetup_RunTimeMode;
+	FillSetup_RunTimeTime_mem = FillSetup_RunTimeTime;
+	FillSetup_ProductionType_mem = FillSetup_ProductionType;
+	
+	FILL_ProductionRun_20 = FillSetup_ProductionType + " -waiting-";
+	FILL_ProductionRun_21 = "-waiting for adjustments-";
+	FILL_ProductionRun_22 = "-waiting for adjustments-";
+	FILL_ProductionRun_23 = "-waiting for adjustments-";
+
+	MyLogFnc("FillSetup");
+
+	PageDisplay("Fill");
+
+	//give the operator 30 minutes before terminating the loop.
+	WHILE Maxdelay < 1800 DO
+		Sleep(1);
+		Maxdelay = Maxdelay + 1;
+		IF Fill_current_processstatus = 5 THEN
+			MaxDelay = 1800;
+		END
+	END
+	IF Maxdelay > 1799 THEN
+		IF Fill_current_processstatus <> 5 THEN
+			Message("Error New Run Fill setup", "Treatment adjustments took more then 10 minutes to complete (Selector switches on 5th floor from Bin Fill to Exchange to Bin Fill)", 48);
+		END
+	END
+
+	//At this point the operator has switched the selectors to send flour to exchange bin and back to normal.
+	//We then complete the changes and stop the bran screw if required.
+	IF 	Fill_current_processstatus = 5 THEN
+		
+		IF TempBranScrewON = 1 THEN	//Bran screw is not used in new run. 
+			//restore temp values from memory to setup run without bran screw conveyor.
+//			ierr = TagWrite("FILL_ProductionRun_1", FILL_ProductionRun_1_mem);
+//			CheckWrite(ierr, "Fill setup Bran screw change param1");
+//			ierr = TagWrite("FILL_ProductionRun_2", FILL_ProductionRun_2_mem);
+//			CheckWrite(ierr, "Fill setup Bran screw change param2");
+//			ierr = TagWrite("FILL_ProductionRun_3", FILL_ProductionRun_3_mem);
+//			CheckWrite(ierr, "Fill setup Bran screw change param3");
+//			ierr = TagWrite("FILL_ProductionRun_4", FILL_ProductionRun_4_mem);
+//			CheckWrite(ierr, "Fill setup Bran screw change param4");
+//			ierr = TagWrite("FILL_ProductionRun_5", FILL_ProductionRun_5_mem);
+//			CheckWrite(ierr, "Fill setup Bran screw change param5");
+//			ierr = TagWrite("FILL_ProductionRun_6", FILL_ProductionRun_6_mem);
+//			CheckWrite(ierr, "Fill setup Bran screw change param6");
+//			ierr = TagWrite("FILL_ProductionRun_7", FILL_ProductionRun_7_mem);
+//			CheckWrite(ierr, "Fill setup Bran screw change param7");
+//			ierr = TagWrite("FILL_ProductionRun_8", FILL_ProductionRun_8_mem);
+//			CheckWrite(ierr, "Fill setup Bran screw change param8");
+//			ierr = TagWrite("FILL_ProductionRun_9", FILL_ProductionRun_9_mem);
+//			CheckWrite(ierr, "Fill setup Bran screw change param9");
+//			ierr = TagWrite("FILL_ProductionRun_10", FILL_ProductionRun_10_mem);
+//			CheckWrite(ierr, "Fill setup Bran screw change param10");
+//			ierr = TagWrite("FILL_ProductionRun_11", FILL_ProductionRun_11_mem);
+//			CheckWrite(ierr, "Fill setup Bran screw change param11");
+//			ierr = TagWrite("FILL_ProductionRun_12", FILL_ProductionRun_12_mem);
+//			CheckWrite(ierr, "Fill setup Bran screw change param12");
+			ierr = TagWrite("FILL_ProductionRun_13", 1);
+			CheckWrite(ierr, "Fill setup Bran screw change param13");
+//			ierr = TagWrite("FILL_ProductionRun_14", FILL_ProductionRun_14_mem);
+//			CheckWrite(ierr, "Fill setup Bran screw change param14");
+//			ierr = TagWrite("FILL_ProductionRun_15", FILL_ProductionRun_15_mem);
+//			CheckWrite(ierr, "Fill setup Bran screw change param15");
+//
+			ierr = TagWrite("FILL_ProductionRun_16", FillSetup_BranFeedMode);
+			CheckWrite(ierr, "FillSetup_BranFeedMode");
+			ierr = TagWrite("FILL_ProductionRun_17", FillSetup_BranFeedSpeed);
+			CheckWrite(ierr, "FillSetup_BranFeedSpeed");
+			Sleep(2);
+			
+			// Here we set this parameter to "1" to preload the new run.
+			ierr = TagWrite("FILL_ProductionRun_18", 1);
+			CheckWrite(ierr, "param18 confirm run");
+			
+			Sleep(2);
+			// Here we set this parameter to "2" to enable to new run.
+			ierr = TagWrite("FILL_ProductionRun_18", 2);
+			CheckWrite(ierr, "param18 confirm run");
+
+			
+			Sleep(2);
+			ierr = TagWrite("FILL_ProductionRun_13", 0);
+			CheckWrite(ierr, "Fill setup Bran screw change param13");
+
+
+
+
+		END
+	
+		FILL_ProductionRun_20 = FillSetup_ProductionType;
+		FILL_ProductionRun_21 = FillSetup_PatentFlourType;
+		FILL_ProductionRun_22 = FillSetup_BakersFlourType;
+		FILL_ProductionRun_23 = FillSetup_ClearsFlourType;
+		MyFncSetHouseBinFlourType(sClearsFlourType, sBakersFlourType, sPatentFlourType);
+	END
+
+
+
+
+//Clear setup parameters.
+CancelFillTransfer()
+END
+
+
+
+//Function to extract Bin number from string.
+INT
+FUNCTION
+GetBinNumber(STRING sTag)
+STRING sBinNumber = TagRead(sTag);
+INT iExtract;
+
+	IF sBinNumber <> "" BITOR sBinNumber <> "- No Selection made -" THEN
+	iExtract = StrToInt(StrTrim(StrRight(sBinNumber, 2)));
+	RETURN iExtract
+	ELSE
+		RETURN 0;
+	END
+END
+
+
+//Function that verify if TagWrite was successfull.
+FUNCTION
+CheckWrite(INT ierr, STRING sTag)
+IF ierr <> 0 THEN
+	Beep(1);
+	Message("Error Writing to tag", "an error occured while writing to tag : " + sTag + " error code : " + IntToStr(ierr), 48);
+	Halt();
+END
+
+END
+
+FUNCTION
+CancelFillTransfer()
+
+FillSetup_ProductionType = "- No selection made -";
+FillSetup_PatentFlourType = "- No selection made -";
+FillSetup_Patent1bin = "- No selection made -";
+FillSetup_Patent2bin = "- No selection made -";
+FillSetup_Patent3bin = "- No selection made -";
+FillSetup_BakersFlourType = "- No selection made -";
+FillSetup_Bakers1bin = "- No selection made -";
+FillSetup_Bakers2bin = "- No selection made -";
+FillSetup_Bakers3bin = "- No selection made -";
+FillSetup_ClearsFlourType = "- No selection made -";
+FillSetup_Clears1bin = "- No selection made -";
+FillSetup_Clears2bin = "- No selection made -";
+FillSetup_Clears3bin = "- No selection made -";
+FillSetup_HeadEndBinMode = 0;
+FillSetup_ExchangeBinMode = 0;
+FillSetup_BranFeedMode = 0;
+FillSetup_BranFeedSpeed = 0;
+FillSetup_RunTimeMode = 0;
+FillSetup_RunTimeTime = 0;
+
+
+END
+
+
+
+
+//My temp function to test flourtypes going to house bins.
+
+FUNCTION
+MyTempFnc()
+INT iNumPos;
+INT iTempNum;
+STRING sClearsFlourType;
+STRING sBakersFlourType;
+STRING sPatentFlourType;
+
+
+	//extract flour number from flour name.
+	//locate ". " in flour name.
+	//iNumPos = StrSearch(0,FillSetup_ClearsFlourType, ". ");
+	//iTempNum = StrLeft(FillSetup_ClearsFlourType, iNumPos);
+	//sClearsFlourType = StrMid(FillSetup_ClearsFlourType, iNumPos + 1, StrLength(FillSetup_ClearsFlourType)-iNumPos);
+
+	//extract flour number from flour name.
+	//locate ". " in flour name.
+	//iNumPos = StrSearch(0,FillSetup_BakersFlourType, ". ");
+	//iTempNum = StrLeft(FillSetup_BakersFlourType, iNumPos);
+	//sBakersFlourType = StrMid(FillSetup_BakersFlourType, iNumPos + 1, StrLength(FillSetup_BakersFlourType)-iNumPos);
+
+	//extract flour number from flour name.
+	//locate ". " in flour name.
+	//iNumPos = StrSearch(0,FillSetup_PatentFlourType, ". ");
+	//iTempNum = StrLeft(FillSetup_PatentFlourType, iNumPos);
+	//sPatentFlourType = StrMid(FillSetup_PatentFlourType, iNumPos + 1, StrLength(FillSetup_PatentFlourType)-iNumPos);
+
+	//MyFncSetHouseBinFlourType(sClearsFlourType, sBakersFlourType, sPatentFlourType);
+	//ierr = TagWrite("FILL_ProductionRun_50", FillSetup_Bin3FeedMode);
+	//CheckWrite(ierr, "FillSetup_Bin3FeedMode");
+	//ierr = TagWrite("FILL_ProductionRun_51", FillSetup_Bin3FeedSpeed);
+	//CheckWrite(ierr, "FillSetup_Bin3FeedSpeed");
+	//ierr = TagWrite("FILL_ProductionRun_50", "FillSetup_Bin3FeedMode");
+	//CheckWrite(ierr, "FillSetup_Bin3FeedMode");
+	//ierr = TagWrite("FILL_ProductionRun_51", "FillSetup_bin3FeedSpeed");
+	//CheckWrite(ierr, "FillSetup_bin3FeedSpeed");
+	FILL_ProductionRun_50 = FillSetup_Bin3FeedMode;
+	FILL_ProductionRun_51 = FillSetup_bin3FeedSpeed
+
+
+END
+
+
+
+
+// Function to set Flour Type in House bins.
+// Created by Adam Rousseau, SE Canada.
+FUNCTION
+MyFncSetHouseBinFlourType(STRING sClearsFlourType, STRING sBakersFlourType, STRING sPatentFlourType)
+
+IF Fill_ProductionRun_1 <> 0 THEN
+	TagWrite("HouseBin" + IntToStr(FILL_ProductionRun_1) + "_FlourType", sClearsFlourType);
+END
+IF Fill_ProductionRun_2 <> 0 THEN
+	TagWrite("HouseBin" + IntToStr(FILL_ProductionRun_2) + "_FlourType", sClearsFlourType);
+END
+IF Fill_ProductionRun_3 <> 0 THEN
+	TagWrite("HouseBin" + IntToStr(FILL_ProductionRun_3) + "_FlourType", sClearsFlourType);
+END
+
+IF Fill_ProductionRun_4 <> 0 THEN
+	TagWrite("HouseBin" + IntToStr(FILL_ProductionRun_4) + "_FlourType", sBakersFlourType);
+END
+IF Fill_ProductionRun_5 <> 0 THEN
+	TagWrite("HouseBin" + IntToStr(FILL_ProductionRun_5) + "_FlourType", sBakersFlourType);
+END
+IF Fill_ProductionRun_6 <> 0 THEN
+	TagWrite("HouseBin" + IntToStr(FILL_ProductionRun_6) + "_FlourType", sBakersFlourType);
+END
+
+IF Fill_ProductionRun_7 <> 0 THEN
+	TagWrite("HouseBin" + IntToStr(FILL_ProductionRun_7) + "_FlourType", sPatentFlourType);
+END
+IF Fill_ProductionRun_8 <> 0 THEN
+	TagWrite("HouseBin" + IntToStr(FILL_ProductionRun_8) + "_FlourType", sPatentFlourType);
+END
+IF Fill_ProductionRun_9 <> 0 THEN
+	TagWrite("HouseBin" + IntToStr(FILL_ProductionRun_9) + "_FlourType", sPatentFlourType);
+END
+
+
+
+END
+

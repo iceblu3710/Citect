@@ -1,0 +1,62 @@
+//Function to reset PLC alarms for Ttransfer System 4 and 5.
+//Created by Adam Rousseau, SE Canada.
+
+FUNCTION
+MyFncResetFillSystem()
+
+Fill_Alarm_Reset = 1;
+Sleep(2);
+Message("Fill System Reset", "Fill System is being reset. Press OK to continue", 0);
+Sleep(2);
+Fill_Alarm_Reset = 0;
+
+
+END
+
+
+
+
+FUNCTION
+MyFncResetSystem4()
+
+Transfer4_alarm_reset = 1;
+Sleep(1);
+Message("Transfer System 4 Reset", "Transfer system 4 is being reset. Press OK to continue", 0);
+Sleep(1);
+Transfer4_alarm_reset = 0;
+
+END
+
+FUNCTION
+MyFncResetSystem5()
+
+Transfer5_alarm_reset = 1;
+Sleep(1);
+Message("Transfer System 5 Reset", "Transfer system 5 is being reset. Press OK to continue", 0);
+Sleep(1);
+Transfer5_alarm_reset = 0;
+
+END
+
+
+FUNCTION
+MyFncResetPackingSystem()
+
+packing_alarm_reset = 1;
+Sleep(1);
+Message("Packing system reset", " Packing System is being reset. Press OK to continue", 0);
+Sleep(1);
+packing_alarm_reset = 0;
+
+END
+
+
+FUNCTION
+MyFncResetgolddust()
+
+gold_dust_alarm_reset = 1;
+Sleep(1);
+Message("Gold Dust Reset", "Gold Dust is being reset. Press OK to continue", 0);
+Sleep(1);
+gold_dust_alarm_reset = 0;
+END
